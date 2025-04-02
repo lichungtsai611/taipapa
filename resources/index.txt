@@ -1,0 +1,21 @@
+1:"$Sreact.fragment"
+2:I[4363,["502","static/chunks/502-f51ce9e737aec753.js","874","static/chunks/874-aa67bb399bb5fb08.js","324","static/chunks/324-72e79ec1a3284837.js","177","static/chunks/app/layout-bcc9e27440854171.js"],"default"]
+3:I[7555,[],""]
+4:I[1295,[],""]
+5:I[6874,["874","static/chunks/874-aa67bb399bb5fb08.js","345","static/chunks/app/not-found-ca2436a43af2b440.js"],""]
+6:I[7145,["502","static/chunks/502-f51ce9e737aec753.js","874","static/chunks/874-aa67bb399bb5fb08.js","324","static/chunks/324-72e79ec1a3284837.js","177","static/chunks/app/layout-bcc9e27440854171.js"],"default"]
+7:I[894,[],"ClientPageRoot"]
+8:I[1788,["502","static/chunks/502-f51ce9e737aec753.js","874","static/chunks/874-aa67bb399bb5fb08.js","752","static/chunks/app/resources/page-a944595e39131979.js"],"default"]
+b:I[9665,[],"OutletBoundary"]
+e:I[9665,[],"ViewportBoundary"]
+10:I[9665,[],"MetadataBoundary"]
+12:I[6614,[],""]
+:HL["/taipapa/_next/static/media/a34f9d1faa5f3315-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/taipapa/_next/static/css/f9db4f23a9ded7ed.css","style"]
+0:{"P":null,"b":"16bfhXS0Z8_hhcjAlMWNf","p":"/taipapa","c":["","resources",""],"i":false,"f":[[["",{"children":["resources",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/taipapa/_next/static/css/f9db4f23a9ded7ed.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"zh-TW","children":["$","body",null,{"className":"__className_a30d5c","children":[["$","$L2",null,{}],["$","main",null,{"className":"min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"flex flex-col items-center justify-center min-h-screen px-4 py-16 text-center","children":[["$","h2",null,{"className":"text-4xl font-bold text-gray-900","children":"404 - Page Not Found"}],["$","p",null,{"className":"mt-4 text-xl text-gray-600","children":"The page you are looking for doesn't exist or has been moved."}],["$","$L5",null,{"href":"/","className":"px-6 py-3 mt-8 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2","children":"Go back home"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L6",null,{}]]}]}]]}],{"children":["resources",["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L7",null,{"Component":"$8","searchParams":{},"params":{},"promises":["$@9","$@a"]}],"$undefined",null,["$","$Lb",null,{"children":["$Lc","$Ld",null]}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","edwZ-qGG5MxFtk2RHxKGq",{"children":[["$","$Le",null,{"children":"$Lf"}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],["$","$L10",null,{"children":"$L11"}]]}],false]],"m":"$undefined","G":["$12","$undefined"],"s":false,"S":true}
+9:{}
+a:{}
+f:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+c:null
+d:null
+11:[["$","title","0",{"children":"台灣人工智慧實務應用推廣協會"}],["$","meta","1",{"name":"description","content":"台灣人工智慧實務應用推廣協會致力於推廣人工智慧技術在各產業的應用，連結產學資源，培育AI人才，推動台灣AI發展。"}],["$","link","2",{"rel":"icon","href":"/taipapa/favicon.ico","type":"image/x-icon","sizes":"16x16"}]]
