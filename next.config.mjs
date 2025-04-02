@@ -1,17 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      }
-    ],
-  },
+  output: 'export',
+  basePath: process.env.NODE_ENV === 'production' ? '/taipapa' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/taipapa/' : '',
+  trailingSlash: true,
 };
 
 export default nextConfig;

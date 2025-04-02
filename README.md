@@ -20,6 +20,26 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Deploy on GitHub Pages
+
+This project is configured for GitHub Pages deployment. You can deploy it in two ways:
+
+### Manual Deployment
+
+To manually deploy the project to GitHub Pages:
+
+```bash
+npm run deploy
+```
+
+This will build the project and push it to the `gh-pages` branch of your repository.
+
+### Automated Deployment
+
+Push your changes to the `main` branch and GitHub Actions will automatically deploy your website to GitHub Pages.
+
+The site will be available at: `https://your-username.github.io/taipapa/`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

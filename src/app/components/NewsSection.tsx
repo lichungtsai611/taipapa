@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const news = [
   {
@@ -33,22 +32,22 @@ const news = [
 
 export default function NewsSection() {
   return (
-    <div className="bg-gray-50 py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="bg-gray-50 py-28 sm:py-32 lg:py-40">
+      <div className="mx-auto max-w-6xl px-6 lg:px-12">
         <motion.div 
-          className="mx-auto max-w-2xl text-center"
+          className="mx-auto max-w-3xl text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">最新消息</h2>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-8">最新消息</h2>
+          <p className="mt-8 text-xl leading-8 text-gray-600">
             了解協會最新動態、活動資訊與AI發展趨勢
           </p>
         </motion.div>
         <motion.div 
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-3"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5, staggerChildren: 0.2 }}
@@ -57,55 +56,38 @@ export default function NewsSection() {
           {news.map((item) => (
             <motion.article 
               key={item.id} 
-              className="flex flex-col items-start overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="flex flex-col items-start overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <div className="relative w-full h-56">
+              <div className="relative w-full h-64">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 z-10"></div>
-                <div className="absolute top-4 left-4 z-20">
-                  <span className="inline-flex items-center rounded-full bg-blue-600 px-3 py-0.5 text-sm font-medium text-white">
+                <div className="absolute top-6 left-6 z-20">
+                  <span className="inline-flex items-center rounded-full bg-blue-600 px-4 py-1.5 text-sm font-medium text-white">
                     {item.category}
                   </span>
                 </div>
-                <Image
-                  src={item.imageUrl}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                />
+                <div 
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url('${item.imageUrl}')` }}
+                ></div>
               </div>
-              <div className="flex flex-1 flex-col justify-between bg-white p-6">
-                <div className="flex-1">
-                  <Link href={`/news/${item.id}`} className="group">
-                    <p className="text-sm text-gray-500">{item.date}</p>
-                    <h3 className="mt-3 text-xl font-semibold leading-6 text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
-                      {item.title}
-                    </h3>
-                    <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{item.description}</p>
-                  </Link>
+              <div className="p-8">
+                <div className="flex items-center gap-x-4 text-xs mb-4">
+                  <time dateTime={item.date} className="text-gray-500">
+                    {item.date}
+                  </time>
                 </div>
-                <div className="mt-6">
-                  <Link
-                    href={`/news/${item.id}`}
-                    className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
-                  >
-                    閱讀更多
-                    <svg
-                      className="ml-1 h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </Link>
+                <div className="group relative">
+                  <h3 className="text-2xl font-semibold leading-6 text-gray-900 group-hover:text-blue-600 mb-4">
+                    <Link href={`/news/${item.id}`}>
+                      <span className="absolute inset-0" />
+                      {item.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-5 text-base leading-6 text-gray-600 line-clamp-3">{item.description}</p>
                 </div>
               </div>
             </motion.article>

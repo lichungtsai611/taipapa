@@ -4,144 +4,136 @@ import { motion } from 'framer-motion';
 
 export default function AboutPage() {
   return (
-    <div className="bg-white py-32">
+    <div className="bg-gradient-to-b from-white to-blue-50 py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-3xl relative">
+          {/* Decorative elements */}
+          <div className="absolute -left-4 -top-4 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply opacity-70 animate-blob" />
+          <div className="absolute -right-4 -top-4 w-72 h-72 bg-cyan-100 rounded-full mix-blend-multiply opacity-70 animate-blob animation-delay-2000" />
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-sky-100 rounded-full mix-blend-multiply opacity-70 animate-blob animation-delay-4000" />
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            className="relative"
           >
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">關於我們</h1>
-            
-            <div className="mt-12">
-              <h2 className="text-2xl font-bold tracking-tight text-blue-600">協會宗旨</h2>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
-                本會旨在推廣人工智慧技術於台灣社會的實務應用，協助全民理解並運用AI工具，以提升生活品質與職場競爭力，促進數位轉型與全民科技素養。
-              </p>
+            <div className="text-center mb-16">
+              <motion.h1 
+                className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+              >
+                關於我們
+              </motion.h1>
+              <div className="mt-4 h-1 w-24 bg-gradient-to-r from-blue-600 to-cyan-600 mx-auto rounded-full" />
             </div>
             
-            <div className="mt-12">
-              <h2 className="text-2xl font-bold tracking-tight text-blue-600">協會任務</h2>
-              <p className="mt-4 text-base text-gray-600">
-                本會之任務如下，並依相關法令規定推動及執行：
-              </p>
-              <ul className="mt-6 space-y-6">
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">1</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    辦理人工智慧教育課程、講座、研討會與工作坊，促進全民AI素養。
-                  </span>
-                </motion.li>
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">2</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    出版與提供人工智慧應用之教材、研究與數位學習資源。
-                  </span>
-                </motion.li>
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">3</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    推廣AI技術於教育、生活、職場與產業上的實務應用。
-                  </span>
-                </motion.li>
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">4</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    協助個人與組織導入AI工具，提升工作效率與創新能力。
-                  </span>
-                </motion.li>
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">5</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    提升社會對AI倫理、法律、資料保護與風險意識之認知。
-                  </span>
-                </motion.li>
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">6</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    促進國內外在人工智慧應用領域的經驗交流與跨界合作。
-                  </span>
-                </motion.li>
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.7 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">7</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    建立AI應用資源平台，分享AI工具、案例與學習管道。
-                  </span>
-                </motion.li>
-                <motion.li 
-                  className="flex gap-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
-                >
-                  <span className="mt-1 h-5 w-5 flex-none rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium">8</span>
-                  <span className="text-base leading-7 text-gray-600">
-                    支援政府、企業與學校推動AI普及教育與轉型計畫。
-                  </span>
-                </motion.li>
-              </ul>
-            </div>
+            <div className="mt-16 space-y-16">
+              <motion.div
+                className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <h2 className="text-2xl font-bold tracking-tight text-blue-600">協會宗旨</h2>
+                <p className="mt-4 text-lg leading-8 text-gray-600">
+                  本會旨在推廣人工智慧技術於台灣社會的實務應用，協助全民理解並運用AI工具，以提升生活品質與職場競爭力，促進數位轉型與全民科技素養。
+                </p>
+              </motion.div>
             
-            <div className="mt-12">
-              <h2 className="text-2xl font-bold tracking-tight text-blue-600">我們的願景</h2>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
-                打造台灣成為全民皆能應用AI的智慧社會，透過人工智慧工具提升全民生活品質，促進產業發展，增進國家競爭力。我們期望在未來五年內，能協助至少50萬名台灣民眾認識、學習並應用AI工具，成為數位時代的積極參與者。
-              </p>
-            </div>
+              <motion.div
+                className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <h2 className="text-2xl font-bold tracking-tight text-blue-600">協會任務</h2>
+                <p className="mt-4 text-base text-gray-600">
+                  本會之任務如下，並依相關法令規定推動及執行：
+                </p>
+                <ul className="mt-8 space-y-6">
+                  {[...Array(8)].map((_, index) => (
+                    <motion.li 
+                      key={index}
+                      className="flex gap-x-4 items-start group"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.1 * index }}
+                    >
+                      <span className="mt-1 h-6 w-6 flex-none rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white flex items-center justify-center text-sm font-medium group-hover:scale-110 transition-transform duration-300">
+                        {index + 1}
+                      </span>
+                      <span className="text-base leading-7 text-gray-600">
+                        {[
+                          "辦理人工智慧教育課程、講座、研討會與工作坊，促進全民AI素養。",
+                          "出版與提供人工智慧應用之教材、研究與數位學習資源。",
+                          "推廣AI技術於教育、生活、職場與產業上的實務應用。",
+                          "協助個人與組織導入AI工具，提升工作效率與創新能力。",
+                          "提升社會對AI倫理、法律、資料保護與風險意識之認知。",
+                          "促進國內外在人工智慧應用領域的經驗交流與跨界合作。",
+                          "建立AI應用資源平台，分享AI工具、案例與學習管道。",
+                          "支援政府、企業與學校推動AI普及教育與轉型計畫。"
+                        ][index]}
+                      </span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            
+              <motion.div
+                className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <h2 className="text-2xl font-bold tracking-tight text-blue-600">我們的願景</h2>
+                <p className="mt-4 text-lg leading-8 text-gray-600">
+                  打造台灣成為全民皆能應用AI的智慧社會，透過人工智慧工具提升全民生活品質，促進產業發展，增進國家競爭力。我們期望在未來五年內，能協助至少50萬名台灣民眾認識、學習並應用AI工具，成為數位時代的積極參與者。
+                </p>
+              </motion.div>
 
-            <div className="mt-12">
-              <h2 className="text-2xl font-bold tracking-tight text-blue-600">加入我們</h2>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
-                無論您是個人、企業、學校或組織，都歡迎加入我們的行列，共同推動台灣AI應用教育與實踐。加入會員可享有專業課程優惠、活動參與權、資源共享等多項權益。
-              </p>
-              <div className="mt-8">
-                <a
-                  href="/join"
-                  className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                >
-                  成為會員
-                </a>
-              </div>
+              <motion.div
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-8 shadow-lg text-white hover:shadow-xl transition-shadow duration-300"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <h2 className="text-2xl font-bold tracking-tight">與我們聯繫</h2>
+                <p className="mt-4 text-lg leading-8 text-white/90">
+                  無論您是個人、企業、學校或組織，都歡迎與我們聯繫，共同推動台灣AI應用教育與實踐。我們提供AI教育課程、顧問諮詢、資源分享等多項服務。
+                </p>
+                <div className="mt-8">
+                  <a
+                    href="/contact"
+                    className="inline-flex items-center rounded-full bg-white px-8 py-4 text-base font-semibold text-blue-600 shadow-sm hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white group transition-all duration-300"
+                  >
+                    聯絡我們
+                    <svg className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
+                    </svg>
+                  </a>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
     </div>
   );
 } 

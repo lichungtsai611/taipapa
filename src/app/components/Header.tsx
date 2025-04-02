@@ -5,13 +5,13 @@ import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Logo from './Logo';
 
 const navigation = [
   { name: '首頁', href: '/' },
   { name: '關於我們', href: '/about' },
   { name: '最新消息', href: '/news' },
   { name: '活動資訊', href: '/events' },
-  { name: '會員專區', href: '/members' },
   { name: '聯絡我們', href: '/contact' },
 ];
 
@@ -42,8 +42,8 @@ export default function Header() {
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">台灣人工智慧實務應用推廣協會</span>
             <div className="flex items-center">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"></div>
-              <span className="ml-3 text-xl font-semibold text-gray-900">台灣人工智慧協會</span>
+              <Logo />
+              <span className="ml-3 text-xl font-semibold text-gray-900">台灣人工智慧實務應用推廣協會</span>
             </div>
           </Link>
         </motion.div>
@@ -80,12 +80,7 @@ export default function Header() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Link
-            href="/login"
-            className="rounded-full bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 transition-colors"
-          >
-            登入 <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {/* Login button removed */}
         </motion.div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -95,8 +90,8 @@ export default function Header() {
             <Link href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">台灣人工智慧實務應用推廣協會</span>
               <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"></div>
-                <span className="ml-3 text-lg font-semibold text-gray-900">台灣人工智慧協會</span>
+                <Logo />
+                <span className="ml-3 text-lg font-semibold text-gray-900">台灣人工智慧實務應用推廣協會</span>
               </div>
             </Link>
             <button
@@ -123,13 +118,7 @@ export default function Header() {
                 ))}
               </div>
               <div className="py-6">
-                <Link
-                  href="/login"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  登入
-                </Link>
+                {/* Login link removed */}
               </div>
             </div>
           </div>
