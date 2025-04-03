@@ -8,12 +8,12 @@ export default function AboutLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="about-section">
+    <div className="about-section w-full overflow-hidden bg-white">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="container mx-auto py-8"
+        className="w-full max-w-[100vw] py-8"
       >
         {children}
       </motion.div>

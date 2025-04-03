@@ -20,20 +20,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-TW">
-      <body className={inter.className}>
+    <html lang="zh-TW" className="w-full overflow-x-hidden">
+      <body className={`${inter.className} w-full overflow-x-hidden`}>
         <PageProgressProvider>
-          <CustomCursor color="blue" />
-          <ProgressIndicator 
-            type="line" 
-            position="top" 
-            theme="gradient" 
-            size="md" 
-            hideOnTop={true}
-          />
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <div className="relative min-h-screen w-full overflow-x-hidden bg-white">
+            <CustomCursor color="blue" />
+            <ProgressIndicator 
+              type="line" 
+              position="top" 
+              theme="gradient" 
+              size="md" 
+              hideOnTop={true}
+            />
+            <Header />
+            <main className="w-full overflow-x-hidden">{children}</main>
+            <Footer />
+          </div>
         </PageProgressProvider>
       </body>
     </html>

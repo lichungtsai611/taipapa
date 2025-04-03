@@ -80,7 +80,7 @@ const resources = [
 
 export default function ResourcesPage() {
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-white py-24 md:py-32 relative">
+    <div className="bg-gradient-to-b from-gray-50 to-white py-24 md:py-32 relative w-full overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-64 h-64 bg-indigo-200 rounded-full mix-blend-multiply opacity-20 animate-blob"></div>
