@@ -10,10 +10,10 @@ const executives = [
     name: '蔡立忠',
     title: '理事長',
     description: '曾任台灣最大金控公司數據分析師，現為快找整合顧問有限公司AI工程師。擁有台大統計碩士學位學程畢業，專精於數據分析與AI應用。致力於推動台灣AI產業的實務應用與全民推廣。',
-    imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+    imageUrl: '/images/team/Richard.webp',
+    website: 'https://richard-info.com/',
     links: {
-      linkedin: 'https://linkedin.com',
-      twitter: 'https://twitter.com',
+      linkedin: 'https://www.linkedin.com/in/richard-tsai-4474994a/',
     },
   },
   {
@@ -21,10 +21,10 @@ const executives = [
     name: '黃海潮',
     title: '副理事長',
     description: '現任台灣路威股份有限公司儲備幹部，台大統計碩士學位學程畢業。擁有豐富的數據分析經驗，專注於AI技術在企業的實務應用。積極推動AI技術的普及化與大眾化。',
-    imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+    imageUrl: '/images/team/Eric.webp',
+    website: 'http://seawave.tw/',
     links: {
-      linkedin: 'https://linkedin.com',
-      twitter: 'https://twitter.com',
+      linkedin: 'https://www.linkedin.com/in/seawave/',
     },
   },
   {
@@ -32,10 +32,10 @@ const executives = [
     name: '廖文碩',
     title: '秘書長',
     description: '現任快找整合顧問有限公司負責人，10萬追蹤粉專「簡報仙貝」創辦人。擁有豐富的企業管理和網路社群經營經驗，專長於數位行銷與內容策略。致力於將AI知識以淺顯易懂的方式傳達給大眾。',
-    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+    imageUrl: '/images/team/Kevin.webp',
+    website: 'https://kevin.voyage/',
     links: {
-      linkedin: 'https://linkedin.com',
-      twitter: 'https://twitter.com',
+      linkedin: 'https://www.linkedin.com/in/sc-kevin/',
     },
   },
 ];
@@ -46,8 +46,8 @@ const advisors = [
     name: '張耿瑭',
     title: '產業顧問',
     organization: '言回有限公司',
-    expertise: '產業應用',
-    imageUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+    expertise: 'AI產業應用',
+    imageUrl: '/images/team/Charles.webp',
   },
   {
     id: 2,
@@ -55,7 +55,7 @@ const advisors = [
     title: '教育顧問',
     organization: '敏逆創新顧問',
     expertise: 'AI教育訓練',
-    imageUrl: 'https://images.unsplash.com/photo-1505503693641-1926193e8d57?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+    imageUrl: '/images/team/Larry.webp',
   },
   {
     id: 3,
@@ -63,7 +63,7 @@ const advisors = [
     title: '美術顧問',
     organization: '快找整合顧問有限公司',
     expertise: 'AI視覺設計',
-    imageUrl: 'https://images.unsplash.com/photo-1504593811423-6dd665756598?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+    imageUrl: '/images/team/Tang.webp',
   },
   {
     id: 4,
@@ -71,7 +71,7 @@ const advisors = [
     title: '行銷顧問',
     organization: '花火教育學院',
     expertise: 'AI行銷策略',
-    imageUrl: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80',
+    imageUrl: '/images/team/Ryan.webp',
   },
 ];
 
@@ -129,19 +129,19 @@ export default function TeamPage() {
                   </h3>
                   <p className="mt-4 text-base leading-7 text-gray-600">{person.description}</p>
                   <ul role="list" className="mt-6 flex gap-x-6">
-                    {person.links.twitter && (
+                    {person.website && (
                       <li>
-                        <a href={person.links.twitter} className="text-gray-400 hover:text-gray-500">
-                          <span className="sr-only">Twitter</span>
-                          <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
+                        <a href={person.website} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-500">
+                          <span className="sr-only">個人網站</span>
+                          <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21.721 12.752a9.711 9.711 0 00-.945-5.003 12.754 12.754 0 01-4.339 2.708 18.991 18.991 0 01-.214 4.772 17.165 17.165 0 005.498-2.477zM14.634 15.55a17.324 17.324 0 00.332-4.647c-.952.227-1.945.347-2.966.347-1.021 0-2.014-.12-2.966-.347a17.515 17.515 0 00.332 4.647 17.385 17.385 0 005.268 0zM9.772 17.119a18.963 18.963 0 004.456 0A17.182 17.182 0 0112 21.724a17.18 17.18 0 01-2.228-4.605zM7.777 15.23a18.87 18.87 0 01-.214-4.774 12.753 12.753 0 01-4.34-2.708 9.711 9.711 0 00-.944 5.004 17.165 17.165 0 005.498 2.477zM21.356 14.752a9.765 9.765 0 01-7.478 6.817 18.64 18.64 0 001.988-4.718 18.627 18.627 0 005.49-2.098zM2.644 14.752c1.682.971 3.53 1.688 5.49 2.099a18.64 18.64 0 001.988 4.718 9.765 9.765 0 01-7.478-6.816zM13.878 2.43a9.755 9.755 0 016.116 3.986 11.267 11.267 0 01-3.746 2.504 18.63 18.63 0 00-2.37-6.49zM12 2.276a17.152 17.152 0 012.805 7.121c-.897.23-1.837.353-2.805.353-.968 0-1.908-.122-2.805-.353A17.151 17.151 0 0112 2.276zM10.122 2.43a18.629 18.629 0 00-2.37 6.49 11.266 11.266 0 01-3.746-2.504 9.754 9.754 0 016.116-3.985z" />
                           </svg>
                         </a>
                       </li>
                     )}
                     {person.links.linkedin && (
                       <li>
-                        <a href={person.links.linkedin} className="text-gray-400 hover:text-gray-500">
+                        <a href={person.links.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-500">
                           <span className="sr-only">LinkedIn</span>
                           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                             <path

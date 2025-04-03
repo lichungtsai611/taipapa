@@ -11,6 +11,22 @@ import {
   GlobeAltIcon,
 } from '@heroicons/react/24/outline';
 
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
 const resources = [
   {
     title: 'AI入門指南',
@@ -18,6 +34,7 @@ const resources = [
     icon: BookOpenIcon,
     href: '/resources/ai-introduction',
     category: '教材',
+    color: 'from-blue-500 to-cyan-400'
   },
   {
     title: 'AI工具應用課程',
@@ -25,6 +42,7 @@ const resources = [
     icon: AcademicCapIcon,
     href: '/resources/ai-courses',
     category: '課程',
+    color: 'from-indigo-500 to-purple-500'
   },
   {
     title: '實用AI工具推薦',
@@ -32,6 +50,7 @@ const resources = [
     icon: GlobeAltIcon,
     href: '/resources/ai-tools',
     category: '工具',
+    color: 'from-green-500 to-teal-400'
   },
   {
     title: 'AI應用案例分享',
@@ -39,6 +58,7 @@ const resources = [
     icon: DocumentTextIcon,
     href: '/resources/case-studies',
     category: '案例',
+    color: 'from-orange-500 to-amber-400'
   },
   {
     title: 'AI技術講座影片',
@@ -46,6 +66,7 @@ const resources = [
     icon: VideoCameraIcon,
     href: '/resources/video-lectures',
     category: '影片',
+    color: 'from-red-500 to-pink-500'
   },
   {
     title: 'AI新聞與趨勢',
@@ -53,60 +74,79 @@ const resources = [
     icon: NewspaperIcon,
     href: '/resources/ai-news',
     category: '新聞',
+    color: 'from-purple-500 to-indigo-400'
   },
 ];
 
 export default function ResourcesPage() {
   return (
-    <div className="bg-white py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="bg-gradient-to-b from-gray-50 to-white py-24 md:py-32 relative">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-10 left-10 w-64 h-64 bg-indigo-200 rounded-full mix-blend-multiply opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-20 left-1/3 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-4000"></div>
+      </div>
+      
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <motion.div 
-          className="mx-auto max-w-2xl text-center"
-          initial={{ opacity: 0, y: 20 }}
+          className="mx-auto max-w-3xl text-center"
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.7 }}
         >
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">AI學習資源中心</h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <span className="inline-block px-4 py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-sm font-semibold mb-6 border border-indigo-100">
+            學習成長
+          </span>
+          <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl mb-8 leading-tight">
+            <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+              AI學習資源中心
+            </span>
+          </h1>
+          <div className="w-32 h-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 mx-auto rounded-full mb-8"></div>
+          <p className="mt-6 text-xl leading-8 text-gray-600">
             我們提供多元的AI學習資源和工具，協助您理解、學習並應用人工智慧技術，提升數位時代的競爭力。
           </p>
         </motion.div>
         
-        <div className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+        <motion.div 
+          className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
           {resources.map((resource, idx) => (
             <motion.div
               key={resource.title}
-              className="relative isolate flex flex-col justify-between overflow-hidden rounded-2xl bg-gray-50 px-6 pt-8 pb-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              className="relative isolate flex flex-col justify-between overflow-hidden rounded-2xl bg-white px-8 pt-10 pb-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100"
+              variants={fadeInUp}
+              whileHover={{ scale: 1.02 }}
             >
-              <div>
-                <div className="mb-6 flex items-center gap-x-4 text-xs">
-                  <time dateTime="2020-03-16" className="text-gray-500">
-                    {resource.category}
-                  </time>
-                </div>
-                <div className="flex items-center gap-x-4">
-                  <resource.icon className="h-8 w-8 text-blue-600" />
-                  <h3 className="text-lg font-semibold leading-6 text-gray-900">
-                    <Link href={resource.href}>
-                      <span className="absolute inset-0" />
-                      {resource.title}
-                    </Link>
-                  </h3>
-                </div>
-                <p className="mt-4 text-sm leading-6 text-gray-600">{resource.description}</p>
+              <div className={`absolute inset-x-0 top-0 h-2 bg-gradient-to-r ${resource.color}`}/>
+              <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                {resource.category}
               </div>
-              <div className="mt-4 flex items-center gap-x-4">
+              <div>
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 p-3">
+                  <resource.icon className={`h-8 w-8 bg-gradient-to-r ${resource.color} bg-clip-text text-transparent`} />
+                </div>
+                <h3 className="text-xl font-bold leading-7 text-gray-900 mb-3">
+                  <Link href={resource.href} className="hover:text-indigo-600 transition-colors">
+                    <span className="absolute inset-0" />
+                    {resource.title}
+                  </Link>
+                </h3>
+                <p className="mt-4 text-base leading-7 text-gray-600">{resource.description}</p>
+              </div>
+              <div className="mt-6 flex items-center gap-x-4">
                 <div className="relative flex items-center gap-x-4">
                   <Link
                     href={resource.href}
-                    className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
+                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500 flex items-center transition-colors"
                   >
                     了解更多
                     <svg
-                      className="ml-1 h-5 w-5"
+                      className="ml-1 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       aria-hidden="true"
@@ -122,62 +162,47 @@ export default function ResourcesPage() {
               </div>
             </motion.div>
           ))}
-        </div>
-        
-        <motion.div 
-          className="mx-auto mt-16 max-w-2xl text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">AI資源平台</h2>
-          <p className="mt-4 text-lg leading-8 text-gray-600">
-            本協會建立AI應用資源平台，分享AI工具、案例與學習管道，協助全民輕鬆學習AI應用。
-          </p>
-          <div className="mt-8">
-            <Link
-              href="/resources/platform"
-              className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              探索AI資源平台
-            </Link>
-          </div>
         </motion.div>
         
         <motion.div 
-          className="mx-auto mt-20 max-w-2xl rounded-3xl ring-1 ring-gray-200 sm:mt-24 lg:mx-0 lg:flex lg:max-w-none"
-          initial={{ opacity: 0, y: 40 }}
+          className="mx-auto mt-24 max-w-none rounded-3xl bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 overflow-hidden shadow-xl border border-indigo-500/20"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
         >
-          <div className="p-8 sm:p-10 lg:flex-auto">
-            <h3 className="text-2xl font-bold tracking-tight text-gray-900">訂閱AI資源更新</h3>
-            <p className="mt-6 text-base leading-7 text-gray-600">
-              訂閱我們的電子報，獲取最新AI學習資源、工具推薦和活動資訊。
-            </p>
-            <div className="mt-6">
-              <form className="sm:flex sm:max-w-md">
-                <label htmlFor="email-address" className="sr-only">
-                  電子郵件地址
-                </label>
-                <input
-                  type="email"
-                  name="email-address"
-                  id="email-address"
-                  autoComplete="email"
-                  required
-                  className="w-full min-w-0 appearance-none rounded-md border-0 bg-white px-3 py-1.5 text-base text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:w-64 sm:text-sm sm:leading-6"
-                  placeholder="請輸入您的電子郵件"
+          <div className="px-8 py-12 md:px-12 md:py-16 md:flex items-center justify-between relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white rounded-full opacity-10"></div>
+            <div className="absolute right-20 bottom-10 w-60 h-60 bg-indigo-400 rounded-full opacity-10"></div>
+            <div className="absolute left-10 top-40 w-20 h-20 bg-purple-300 rounded-full opacity-20"></div>
+            
+            <div className="md:w-3/5 mb-8 md:mb-0 relative z-10">
+              <h3 className="text-3xl font-bold text-white mb-4">訂閱AI資源更新</h3>
+              <p className="text-indigo-100 text-lg mb-6 leading-relaxed">
+                訂閱我們的電子報，獲取最新AI學習資源、工具推薦和活動資訊。
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <input 
+                  type="email" 
+                  placeholder="請輸入您的電子郵件" 
+                  className="px-5 py-3.5 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white w-full sm:w-auto sm:flex-1 shadow-lg"
                 />
-                <div className="mt-4 sm:ml-4 sm:mt-0 sm:flex-shrink-0">
-                  <button
-                    type="submit"
-                    className="flex w-full items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  >
-                    訂閱
-                  </button>
-                </div>
-              </form>
+                <button className="bg-white text-indigo-600 hover:bg-indigo-50 px-6 py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                  訂閱
+                </button>
+              </div>
+              <p className="text-indigo-200 text-sm mt-4">
+                我們尊重您的隱私，隨時可以取消訂閱。
+              </p>
+            </div>
+            <div className="md:w-2/5 relative z-10">
+              <div className="relative">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-48 w-48 text-white opacity-15 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white rounded-full opacity-20 animate-pulse"></div>
+              </div>
             </div>
           </div>
         </motion.div>

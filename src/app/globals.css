@@ -24,3 +24,78 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom Cursor Styles */
+html, body {
+  cursor: none !important;
+}
+
+/* Mobile devices fallback */
+@media (max-width: 768px) {
+  html, body {
+    cursor: auto !important;
+  }
+}
+
+/* Custom data attributes for cursor interactions */
+button, .button, a, [role="button"], 
+input[type="submit"], input[type="button"], 
+.clickable, [data-cursor-hover] {
+  cursor: none !important;
+}
+
+/* Special cursor behavior for specific UI elements */
+.card, .hover-scale, .card-interactive {
+  cursor: none !important;
+}
+
+/* For non-touch devices only */
+@media (hover: hover) and (pointer: fine) {
+  .link-hover:hover {
+    cursor: none !important;
+  }
+}
+
+/* Custom grid for footer navigation */
+.md\:grid-template-columns-footer {
+  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+}
+
+/* Improve hash navigation with fixed header */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 120px; /* Increased from 100px to match header height */
+}
+
+/* Give all elements with IDs proper scroll margins */
+[id] {
+  scroll-margin-top: 120px; /* Increased from 100px to match scroll-padding */
+}
+
+/* Specific adjustment for course sections */
+.courses-page [id] {
+  scroll-margin-top: 140px; /* Additional padding for course page sections */
+}
+
+/* Make form placeholder text darker for better readability */
+::placeholder {
+  color: #6b7280 !important; /* Darker gray (gray-500) instead of the default light gray */
+  opacity: 1;
+}
+
+input:focus::placeholder {
+  color: #4b5563 !important; /* Even darker on focus (gray-600) */
+}
+
+/* Override the Tailwind placeholder color classes */
+.placeholder-gray-400::placeholder,
+.placeholder-gray-500::placeholder {
+  color: #4b5563 !important; /* gray-600 */
+}
+
+/* Make checkbox label text darker */
+[type="checkbox"] + span,
+[type="checkbox"] + label,
+label {
+  color: #374151; /* gray-700 */
+}

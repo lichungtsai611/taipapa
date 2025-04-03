@@ -100,15 +100,12 @@ export default function AboutPage() {
                 <p className="mt-4 text-lg leading-8 text-white/90">
                   無論您是個人、企業、學校或組織，都歡迎與我們聯繫，共同推動台灣AI應用教育與實踐。我們提供AI教育課程、顧問諮詢、資源分享等多項服務。
                 </p>
-                <div className="mt-8">
+                <div className="mt-10 flex gap-x-6">
                   <a
-                    href="/contact"
-                    className="inline-flex items-center rounded-full bg-white px-8 py-4 text-base font-semibold text-blue-600 shadow-sm hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white group transition-all duration-300"
+                    href="#contactSection"
+                    className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   >
                     聯絡我們
-                    <svg className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
-                    </svg>
                   </a>
                 </div>
               </motion.div>

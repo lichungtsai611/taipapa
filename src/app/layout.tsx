@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import CustomCursor from "./components/CustomCursor";
+import ProgressIndicator from "./components/ProgressIndicator";
+import PageProgressProvider from "./components/PageProgressProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,19 +22,19 @@ export default function RootLayout({
   return (
     <html lang="zh-TW">
       <body className={inter.className}>
-        <Header 
-          links={[
-            { name: "首頁", href: "/" },
-            { name: "關於我們", href: "/about" },
-            { name: "協會任務", href: "/mission" },
-            { name: "最新消息", href: "/news" },
-            { name: "活動資訊", href: "/events" },
-            { name: "參考資源", href: "/resources" },
-            { name: "聯絡我們", href: "/contact" },
-          ]} 
-        />
-        <main>{children}</main>
-        <Footer />
+        <PageProgressProvider>
+          <CustomCursor color="blue" />
+          <ProgressIndicator 
+            type="line" 
+            position="top" 
+            theme="gradient" 
+            size="md" 
+            hideOnTop={true}
+          />
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </PageProgressProvider>
       </body>
     </html>
   );

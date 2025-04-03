@@ -3,6 +3,31 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { StarIcon } from '@heroicons/react/20/solid';
+import { 
+  SparklesIcon,
+  AdjustmentsHorizontalIcon
+} from '@heroicons/react/24/outline';
+
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } }
+};
 
 // Mock data for AI tools
 const aiTools = [
@@ -13,10 +38,11 @@ const aiTools = [
     category: '文字生成',
     rating: 4.8,
     useCases: ['客服自動回覆', '內容創作', '程式碼輔助', '語言翻譯'],
-    imageUrl: 'https://images.unsplash.com/photo-1677442135073-c496cf557d58?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1200px-ChatGPT_logo.svg.png',
     link: 'https://chat.openai.com',
     isPro: false,
     difficulty: '入門',
+    color: 'from-green-500 to-emerald-400'
   },
   {
     id: 2,
@@ -25,10 +51,11 @@ const aiTools = [
     category: '圖像生成',
     rating: 4.7,
     useCases: ['概念藝術', '產品設計', '品牌視覺', '插畫創作'],
-    imageUrl: 'https://images.unsplash.com/photo-1682687982501-1e58ab814714?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png',
     link: 'https://www.midjourney.com',
     isPro: true,
     difficulty: '中級',
+    color: 'from-indigo-500 to-purple-400'
   },
   {
     id: 3,
@@ -37,118 +64,63 @@ const aiTools = [
     category: '寫作輔助',
     rating: 4.5,
     useCases: ['筆記整理', '內容摘要', '寫作構思', '文案優化'],
-    imageUrl: 'https://images.unsplash.com/photo-1648483424707-ef8b5f9b04f8?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png',
     link: 'https://www.notion.so',
     isPro: false,
     difficulty: '入門',
+    color: 'from-gray-600 to-gray-500'
   },
   {
     id: 4,
-    name: 'DALL-E',
-    description: '由OpenAI開發的AI圖像生成模型，可根據文字描述生成多樣化的圖像，支持多種風格和主題。',
-    category: '圖像生成',
+    name: 'Line Chatbot',
+    description: 'Line平台上的聊天機器人開發工具，可以創建智能客服、自動回覆系統，適合企業與用戶進行即時互動。',
+    category: '聊天機器人',
     rating: 4.6,
-    useCases: ['社交媒體素材', '創意發想', '教學說明圖', '市場營銷'],
-    imageUrl: 'https://images.unsplash.com/photo-1678391422089-0945775292e8?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://openai.com/dall-e-2',
+    useCases: ['客戶服務', '自動回覆', '產品諮詢', '行銷活動'],
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg',
+    link: 'https://developers.line.biz/en/services/messaging-api/',
     isPro: false,
-    difficulty: '入門',
+    difficulty: '中級',
+    color: 'from-green-500 to-lime-400'
   },
   {
     id: 5,
+    name: 'Cursor',
+    description: '基於AI的程式碼編輯器，整合大型語言模型協助開發者更高效地編寫和理解程式碼，提供智能代碼補全和重構建議。',
+    category: '程式開發',
+    rating: 4.8,
+    useCases: ['程式碼生成', 'Bug修復', '程式碼解釋', '重構輔助'],
+    imageUrl: 'https://www.cursor.so/apple-touch-icon.png',
+    link: 'https://cursor.sh',
+    isPro: false,
+    difficulty: '中級',
+    color: 'from-blue-600 to-blue-400'
+  },
+  {
+    id: 6,
+    name: 'Canva',
+    description: '結合AI功能的設計平台，提供文字到圖像生成、設計魔術師、背景移除等智能工具，幫助用戶快速創建專業設計。',
+    category: '設計輔助',
+    rating: 4.7,
+    useCases: ['社群圖片', '簡報設計', '行銷素材', '品牌設計'],
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Canva_logo.png',
+    link: 'https://www.canva.com',
+    isPro: false,
+    difficulty: '入門',
+    color: 'from-blue-500 to-cyan-400'
+  },
+  {
+    id: 7,
     name: 'GitHub Copilot',
     description: 'Microsoft與OpenAI合作開發的程式碼輔助工具，可根據註釋和現有程式碼提供智能建議，提高開發效率。',
     category: '程式開發',
     rating: 4.7,
     useCases: ['程式碼自動完成', 'API使用建議', '函數生成', '程式碼最佳化'],
-    imageUrl: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: 'https://github.blog/wp-content/uploads/2023/05/GitHub-Copilot-logo.png',
     link: 'https://github.com/features/copilot',
     isPro: true,
     difficulty: '進階',
-  },
-  {
-    id: 6,
-    name: 'Jasper',
-    description: '專業的AI內容創作平台，提供多種寫作工具和模板，協助創建部落格文章、廣告文案、電子郵件等各類內容。',
-    category: '寫作輔助',
-    rating: 4.5,
-    useCases: ['行銷文案', 'SEO文章', '電子報', '社群貼文'],
-    imageUrl: 'https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://www.jasper.ai',
-    isPro: true,
-    difficulty: '中級',
-  },
-  {
-    id: 7,
-    name: 'Runway',
-    description: '創意影片製作AI工具，提供影片編輯、動畫生成、視覺效果等功能，適合影像創作者使用。',
-    category: '影片生成',
-    rating: 4.6,
-    useCases: ['短影片創作', '動畫製作', '視覺特效', '內容剪輯'],
-    imageUrl: 'https://images.unsplash.com/photo-1616628188540-925609abe696?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://runwayml.com',
-    isPro: true,
-    difficulty: '進階',
-  },
-  {
-    id: 8,
-    name: 'Grammarly',
-    description: '使用AI技術的寫作輔助工具，可檢查文法、拼寫和風格，提供改進建議，適合各類寫作需求。',
-    category: '寫作輔助',
-    rating: 4.6,
-    useCases: ['論文寫作', '商業郵件', '履歷優化', '內容校對'],
-    imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://www.grammarly.com',
-    isPro: false,
-    difficulty: '入門',
-  },
-  {
-    id: 9,
-    name: 'Synthesia',
-    description: 'AI影片生成平台，可將文字轉換為由虛擬人物呈現的專業影片，支持多種語言和角色選擇。',
-    category: '影片生成',
-    rating: 4.4,
-    useCases: ['教學課程', '企業培訓', '產品演示', '多語言內容'],
-    imageUrl: 'https://images.unsplash.com/photo-1592155931584-901ac15763e3?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://www.synthesia.io',
-    isPro: true,
-    difficulty: '中級',
-  },
-  {
-    id: 10,
-    name: 'Descript',
-    description: '全功能的音頻和影片編輯平台，運用AI技術實現轉錄、編輯和生成聲音等功能，簡化影音製作流程。',
-    category: '音頻處理',
-    rating: 4.5,
-    useCases: ['播客製作', '影片剪輯', '逐字稿生成', '配音合成'],
-    imageUrl: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://www.descript.com',
-    isPro: true,
-    difficulty: '中級',
-  },
-  {
-    id: 11,
-    name: 'Otter.ai',
-    description: '智能語音轉文字服務，使用AI技術實時記錄和轉錄會議內容，支持多人識別和關鍵字摘要。',
-    category: '音頻處理',
-    rating: 4.4,
-    useCases: ['會議紀錄', '採訪轉錄', '課堂筆記', '研究資料整理'],
-    imageUrl: 'https://images.unsplash.com/photo-1559223607-a43fac952a12?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://otter.ai',
-    isPro: false,
-    difficulty: '入門',
-  },
-  {
-    id: 12,
-    name: 'Teachable Machine',
-    description: 'Google開發的無程式碼機器學習工具，讓使用者能輕鬆創建和訓練模型，適合教育和快速原型開發。',
-    category: '機器學習',
-    rating: 4.3,
-    useCases: ['影像辨識', '聲音分類', '姿勢檢測', '教育示範'],
-    imageUrl: 'https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?q=80&w=1200&auto=format&fit=crop',
-    link: 'https://teachablemachine.withgoogle.com',
-    isPro: false,
-    difficulty: '入門',
+    color: 'from-purple-600 to-pink-400'
   },
 ];
 
@@ -158,80 +130,106 @@ const difficulties = ['入門', '中級', '進階'];
 
 export default function ToolsPage() {
   return (
-    <div className="bg-white py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="bg-gradient-to-b from-gray-50 to-white py-24 md:py-32 relative">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-10 left-10 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-20 left-1/3 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply opacity-10 animate-blob animation-delay-4000"></div>
+      </div>
+      
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto max-w-2xl text-center"
+          transition={{ duration: 0.7 }}
+          className="mx-auto max-w-3xl text-center"
         >
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">AI工具推薦</h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <span className="inline-block px-4 py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-sm font-semibold mb-6 border border-indigo-100">
+            生產力工具
+          </span>
+          <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl mb-8 leading-tight">
+            <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+              AI工具推薦
+            </span>
+          </h1>
+          <div className="w-32 h-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 mx-auto rounded-full mb-8"></div>
+          <p className="mt-6 text-xl leading-8 text-gray-600">
             我們精選了一系列實用的AI工具，協助您在各個領域提升效率和創造力。
             從文字生成、圖像創作到音頻處理，這些工具能幫助您更輕鬆地完成各種任務。
           </p>
         </motion.div>
 
-        <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {aiTools.map((tool, idx) => (
+        <motion.div 
+          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-4"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          {aiTools.map((tool) => (
             <motion.article 
-              key={tool.id} 
-              className="flex flex-col items-start overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.05 }}
-              viewport={{ once: true }}
+              key={tool.id}
+              className="flex flex-col items-start overflow-hidden rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-2 border border-gray-100"
+              variants={fadeInUp}
+              whileHover={{ scale: 1.02 }}
             >
               <div className="relative w-full">
+                <div className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${tool.color}`}/>
                 <div 
-                  className="aspect-[16/9] w-full bg-gray-100 bg-cover bg-center sm:aspect-[16/9]"
+                  className="aspect-square w-full bg-gray-100 bg-cover bg-center relative group-hover:scale-105 transition-transform duration-500 ease-out overflow-hidden"
                   style={{ backgroundImage: `url('${tool.imageUrl}')` }}
                 >
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                   {tool.isPro && (
-                    <div className="absolute top-4 right-4 rounded-full bg-amber-400 px-3 py-1 text-xs font-medium text-white">
-                      專業版
+                    <div className="absolute top-4 right-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-400 px-3 py-1 text-xs font-medium text-white shadow-md backdrop-blur-sm">
+                      <div className="flex items-center">
+                        <SparklesIcon className="h-3 w-3 mr-1" />
+                        專業版
+                      </div>
                     </div>
                   )}
                 </div>
               </div>
               <div className="flex flex-1 flex-col justify-between p-6 bg-white w-full">
                 <div className="flex-1">
-                  <div className="flex items-center gap-x-4 text-xs mb-2">
-                    <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                  <div className="flex items-center gap-x-4 text-xs mb-3">
+                    <span className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
                       {tool.category}
                     </span>
-                    <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                    <span className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-white ring-1 ring-inset ring-indigo-700/10 bg-gradient-to-r ${tool.color}`}>
                       {tool.difficulty}
                     </span>
                   </div>
                   
-                  <h3 className="text-xl font-semibold leading-6 text-gray-900 group-hover:text-blue-600">
+                  <h3 className="text-xl font-bold leading-7 text-gray-900 group-hover:text-indigo-600 transition-colors">
                     {tool.name}
                   </h3>
                   
-                  <div className="flex items-center mt-1 mb-3">
+                  <div className="flex items-center mt-2 mb-4">
                     <div className="flex items-center">
                       {[0, 1, 2, 3, 4].map((rating) => (
                         <StarIcon
                           key={rating}
                           className={`h-4 w-4 flex-shrink-0 ${
-                            tool.rating > rating ? 'text-yellow-400' : 'text-gray-200'
+                            tool.rating > rating ? 'text-amber-400' : 'text-gray-200'
                           }`}
                           aria-hidden="true"
                         />
                       ))}
                     </div>
-                    <p className="ml-2 text-sm text-gray-500">{tool.rating}</p>
+                    <p className="ml-2 text-sm font-medium text-gray-600">{tool.rating}</p>
                   </div>
                   
                   <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">{tool.description}</p>
                   
-                  <div className="mt-4">
-                    <h4 className="text-sm font-medium text-gray-900">適用場景：</h4>
-                    <div className="mt-2 flex flex-wrap gap-1">
+                  <div className="mt-5">
+                    <h4 className="text-sm font-semibold text-gray-900 flex items-center">
+                      <AdjustmentsHorizontalIcon className="h-4 w-4 mr-1.5 text-indigo-500" />
+                      適用場景
+                    </h4>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
                       {tool.useCases.map((useCase) => (
-                        <span key={useCase} className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600">
+                        <span key={useCase} className="inline-flex items-center rounded-full bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 border border-gray-100">
                           {useCase}
                         </span>
                       ))}
@@ -244,10 +242,10 @@ export default function ToolsPage() {
                     href={tool.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    className={`inline-flex items-center rounded-xl bg-gradient-to-r ${tool.color} px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-300 w-full justify-center`}
                   >
                     前往使用
-                    <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                    <svg className="ml-1.5 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                     </svg>
                   </a>
@@ -255,67 +253,46 @@ export default function ToolsPage() {
               </div>
             </motion.article>
           ))}
-        </div>
+        </motion.div>
 
         <motion.div 
-          className="mx-auto mt-20 max-w-7xl rounded-3xl bg-blue-50 p-8"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
+          className="mx-auto mt-24 max-w-none rounded-3xl bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 overflow-hidden shadow-xl border border-indigo-500/20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
         >
-          <div className="sm:flex sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">需要更多AI工具推薦？</h2>
-              <p className="mt-2 text-base text-gray-600">加入我們的會員，獲得專業AI工具指南、使用教學與優惠方案。</p>
-            </div>
-            <div className="mt-4 sm:mt-0">
-              <Link
-                href="/join"
-                className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              >
-                立即加入
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-        
-        <motion.div 
-          className="mx-auto mt-20"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-8">常見問題</h2>
-          
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900">如何選擇適合的AI工具？</h3>
-              <p className="mt-2 text-gray-600">
-                選擇AI工具時，應考慮您的具體需求、使用目的、預算限制及使用難度。建議先從免費或試用版開始，熟悉操作後再決定是否升級到專業版。
-              </p>
-            </div>
+          <div className="px-8 py-12 md:px-12 md:py-16 md:flex items-center justify-between relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white rounded-full opacity-10"></div>
+            <div className="absolute right-20 bottom-10 w-60 h-60 bg-indigo-400 rounded-full opacity-10"></div>
+            <div className="absolute left-10 top-40 w-20 h-20 bg-purple-300 rounded-full opacity-20"></div>
             
-            <div className="rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900">這些AI工具是否安全可靠？</h3>
-              <p className="mt-2 text-gray-600">
-                我們推薦的工具都經過評估，但在使用任何AI工具時，建議閱讀其隱私政策，了解數據處理方式。對於處理敏感資訊的任務，請選擇有明確隱私保障的服務。
+            <div className="md:w-3/5 mb-8 md:mb-0 relative z-10">
+              <h3 className="text-3xl font-bold text-white mb-4">想了解更多AI工具嗎？</h3>
+              <p className="text-indigo-100 text-lg mb-6 leading-relaxed">
+                訂閱我們的電子報，定期收到最新AI工具推薦、使用教學和行業應用案例分享。
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <input 
+                  type="email" 
+                  placeholder="請輸入您的電子郵件" 
+                  className="px-5 py-3.5 rounded-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white w-full sm:w-auto sm:flex-1 shadow-lg"
+                />
+                <button className="bg-white text-indigo-600 hover:bg-indigo-50 px-6 py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                  訂閱
+                </button>
+              </div>
+              <p className="text-indigo-200 text-sm mt-4">
+                我們尊重您的隱私，隨時可以取消訂閱。
               </p>
             </div>
-            
-            <div className="rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900">我需要技術背景才能使用這些工具嗎？</h3>
-              <p className="mt-2 text-gray-600">
-                大多數推薦工具都設計得相當直觀，適合無技術背景的使用者。我們也標示了難度等級，您可以從「入門」級別的工具開始嘗試，逐步提升熟練度。
-              </p>
-            </div>
-            
-            <div className="rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900">協會是否提供這些工具的培訓課程？</h3>
-              <p className="mt-2 text-gray-600">
-                是的，我們定期舉辦各類AI工具使用工作坊和線上課程，協助會員掌握這些工具的使用技巧。您可以查看我們的<Link href="/courses" className="text-blue-600 hover:text-blue-500">課程頁面</Link>了解詳情。
-              </p>
+            <div className="md:w-2/5 relative z-10">
+              <div className="relative">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-48 w-48 text-white opacity-15 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white rounded-full opacity-20 animate-pulse"></div>
+              </div>
             </div>
           </div>
         </motion.div>
