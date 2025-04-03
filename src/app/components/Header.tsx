@@ -31,30 +31,30 @@ const navigation = [
   },
   {
     name: 'AI資源',
-    href: '#',
+    href: '/resources',
     icon: <LightBulbIcon className="h-5 w-5 mr-1" />,
     submenu: [
       { name: 'AI學習資源', href: '/resources', icon: <AcademicCapIcon className="h-4 w-4 mr-1" /> },
-      { name: 'AI工具推薦', href: '/tools', icon: <WrenchScrewdriverIcon className="h-4 w-4 mr-1" /> },
-      { name: 'AI好書分享', href: '/publications', icon: <BookOpenIcon className="h-4 w-4 mr-1" /> },
+      { name: 'AI工具推薦', href: '/resources/tools', icon: <WrenchScrewdriverIcon className="h-4 w-4 mr-1" /> },
+      { name: 'AI好書分享', href: '/resources/publications', icon: <BookOpenIcon className="h-4 w-4 mr-1" /> },
     ]
   },
   {
     name: '最新消息',
-    href: '#',
+    href: '/news',
     icon: <NewspaperIcon className="h-5 w-5 mr-1" />,
     submenu: [
       { name: 'AI前沿科技', href: '/news', icon: <NewspaperIcon className="h-4 w-4 mr-1" /> },
-      { name: '協會活動', href: '/events', icon: <CalendarIcon className="h-4 w-4 mr-1" /> },
+      { name: '協會活動', href: '/news/events', icon: <CalendarIcon className="h-4 w-4 mr-1" /> },
     ]
   },
   {
     name: '關於我們',
-    href: '#',
+    href: '/about',
     icon: <UserGroupIcon className="h-5 w-5 mr-1" />,
     submenu: [
       { name: '協會簡介', href: '/about', icon: <InformationCircleIcon className="h-4 w-4 mr-1" /> },
-      { name: '組織成員', href: '/team', icon: <UsersIcon className="h-4 w-4 mr-1" /> },
+      { name: '組織成員', href: '/about/team', icon: <UsersIcon className="h-4 w-4 mr-1" /> },
     ]
   },
 ];
