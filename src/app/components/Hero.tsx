@@ -2,142 +2,41 @@
 
 import { motion, useMotionValue, useTransform, useSpring, useScroll, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
+
+// 節流函數
+function throttle<T extends (...args: any[]) => any>(
+  func: T,
+  limit: number
+): (...args: Parameters<T>) => void {
+  let inThrottle: boolean = false;
+  return function(this: any, ...args: Parameters<T>): void {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+}
 
 export default function Hero() {
   // Mouse tracking for interactive effects
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const heroRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const mousePositionRef = useRef({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [hoverButton, setHoverButton] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [particles, setParticles] = useState<Array<{
-    id: number;
-    x: number;
-    y: number;
-    size: number;
-    color: string;
-    vx: number;
-    vy: number;
-    life: number;
-  }>>([]);
+  const [isClient, setIsClient] = useState(false);
   
   // Interactive text elements
   const [hoveredChar, setHoveredChar] = useState<number | null>(null);
   const titleText = "台灣人工智慧";
   const subtitleText = "實務應用推廣協會";
   
-  // Mouse movement tracking
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isMobile || !heroRef.current) return;
-    
-    const rect = heroRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Update mouse position for various effects
-    mouseX.set(x);
-    mouseY.set(y);
-    setMousePosition({ 
-      x: (x / rect.width), 
-      y: (y / rect.height) 
-    });
-    
-    // Create particles on mouse move (throttled)
-    if (Math.random() > 0.92) {
-      createParticle(x, y);
-    }
-  };
-  
-  // Create interactive particles
-  const createParticle = (x: number, y: number) => {
-    if (!heroRef.current) return;
-    
-    const rect = heroRef.current.getBoundingClientRect();
-    const colors = ['#3b82f6', '#8b5cf6', '#6366f1', '#a855f7', '#ec4899'];
-    
-    const particle = {
-      id: Date.now() + Math.random(),
-      x: (x / rect.width) * 100,
-      y: (y / rect.height) * 100,
-      size: Math.random() * 10 + 5,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
-      life: Math.random() * 3 + 1
-    };
-    
-    setParticles(prev => [...prev.slice(-30), particle]);
-    
-    // Remove particle after its lifespan
-    setTimeout(() => {
-      setParticles(prev => prev.filter(p => p.id !== particle.id));
-    }, particle.life * 1000);
-  };
-  
-  // Handle click effect - create burst of particles
-  const handleClick = (e: React.MouseEvent) => {
-    if (isMobile || !heroRef.current) return;
-    
-    const rect = heroRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Create a burst of particles
-    for (let i = 0; i < 25; i++) {
-      setTimeout(() => createParticle(x, y), i * 20);
-    }
-  };
-  
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-    setHoverButton(null);
-  };
-  
-  // Set up the component
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Create initial particles
-    const createInitialParticles = () => {
-      if (!heroRef.current) return;
-      
-      const rect = heroRef.current.getBoundingClientRect();
-      for (let i = 0; i < 30; i++) {
-        createParticle(
-          Math.random() * rect.width,
-          Math.random() * rect.height
-        );
-      }
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    // Create initial particles with delay
-    setTimeout(createInitialParticles, 1000);
-    
-    // Regular particle generation for continuous animation
-    const particleInterval = setInterval(() => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        createParticle(
-          Math.random() * rect.width,
-          Math.random() * rect.height
-        );
-      }
-    }, 200);
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-      clearInterval(particleInterval);
-    };
-  }, []);
+  // 使用固定的字符集合用於數字雨效果
+  const digitalRainChars = ['0', '1', 'A', 'I', '智', '慧', '台', '灣', '∞', '♦'];
   
   // Animation effects for background elements
   const { scrollY } = useScroll();
@@ -149,14 +48,73 @@ export default function Hero() {
   const gradientX = useMotionValue(0);
   const gradientY = useMotionValue(0);
   
+  // Mouse event handlers
+  const handleMouseMove = useCallback(
+    throttle((e: React.MouseEvent) => {
+      if (isMobile || !heroRef.current) return;
+      
+      const rect = heroRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      
+      mousePositionRef.current = { x, y };
+      
+      // Update gradient position based on mouse
+      gradientX.set(x * 100);
+      gradientY.set(y * 100);
+      
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    }, 50),
+    [mouseX, mouseY, gradientX, gradientY, isMobile]
+  );
+  
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+  
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
+  
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    if (isMobile) return;
+    // Basic click handling without particle effects
+  }, [isMobile]);
+  
+  // Function to scroll to footer
+  const scrollToFooter = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const footer = document.getElementById('footer');
+    if (footer) {
+      footer.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
   useEffect(() => {
     const updateGradient = () => {
-      gradientX.set(mousePosition.x * 100);
-      gradientY.set(mousePosition.y * 100);
+      gradientX.set(mousePositionRef.current.x * 100);
+      gradientY.set(mousePositionRef.current.y * 100);
     };
     
     updateGradient();
-  }, [mousePosition, gradientX, gradientY]);
+  }, [gradientX, gradientY]);
+  
+  // Check if device is mobile and if we're on client side
+  useEffect(() => {
+    setIsClient(true);
+    
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
   
   // Text animation variants
   const textVariants = {
@@ -267,10 +225,7 @@ export default function Hero() {
     }
   ];
   
-  // Digital rain effect characters
-  const digitalRainChars = "01";
-  
-  // Floating decorative elements
+  // Floating decorative elements - 確保在客戶端渲染
   const floatingElements = [
     { 
       id: 1, 
@@ -340,13 +295,58 @@ export default function Hero() {
     }
   ];
   
-  // Function to scroll to footer
-  const scrollToFooter = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const footer = document.getElementById('footer');
-    if (footer) {
-      footer.scrollIntoView({ behavior: 'smooth' });
+  const RainDrop = ({ index }: { index: number }) => {
+    const isClient = typeof window !== 'undefined';
+    
+    // 使用確定性值代替隨機值
+    const initialX = 100 + (index * 50) % 500;
+    const delay = 0.1 + (index * 0.3) % 2;
+    const duration = 3 + (index * 0.5) % 3;
+    
+    return (
+      <motion.div
+        className="absolute top-0 z-0 bg-gradient-to-b from-cyan-500/30 to-blue-500/10 rounded-full w-1 h-10"
+        initial={{ 
+          x: initialX, 
+          y: -20, 
+          opacity: 0 
+        }}
+        animate={{ 
+          y: [null, 200 + (index * 30) % 100],
+          opacity: [0, 0.4, 0]
+        }}
+        transition={{
+          duration: duration,
+          delay: delay,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
+    );
+  };
+  
+  const DigitalRain = () => {
+    const [isClient, setIsClient] = useState(false);
+    
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+    
+    // 使用固定數量元素而非隨機數量
+    const elements = Array.from({ length: 15 }, (_, i) => i);
+    
+    // 僅在客戶端渲染
+    if (!isClient) {
+      return null;
     }
+    
+    return (
+      <div className="absolute -bottom-10 left-0 right-0 h-60 overflow-hidden z-0 pointer-events-none">
+        {elements.map((i) => (
+          <RainDrop key={i} index={i} />
+        ))}
+      </div>
+    );
   };
   
   return (
@@ -394,67 +394,8 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
       </motion.div>
       
-      {/* Interactive particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {particles.map((particle) => (
-          <motion.div
-            key={particle.id}
-            className="absolute rounded-full"
-            style={{
-              backgroundColor: particle.color,
-              width: particle.size,
-              height: particle.size,
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-              boxShadow: `0 0 ${particle.size / 2}px ${particle.color}`,
-            }}
-            animate={{
-              x: [`${particle.vx * 50}px`, `${particle.vx * 100}px`],
-              y: [`${particle.vy * 50}px`, `${particle.vy * 100}px`],
-              opacity: [0.8, 0],
-              scale: [1, 0],
-            }}
-            transition={{
-              duration: particle.life,
-              ease: "easeOut"
-            }}
-          />
-        ))}
-      </div>
-      
-      {/* Digital rain background effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-blue-500/15 text-xs font-mono"
-            initial={{ 
-              x: `${Math.random() * 100}%`, 
-              y: -20, 
-              opacity: 0.3 
-            }}
-            animate={{
-              y: ['-5%', '105%'],
-              opacity: [0.15, 0]
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-              ease: "linear"
-            }}
-          >
-            {[...Array(Math.floor(Math.random() * 10) + 5)].map((_, j) => (
-              <div key={j} className="mb-1">
-                {digitalRainChars[Math.floor(Math.random() * digitalRainChars.length)]}
-              </div>
-            ))}
-          </motion.div>
-        ))}
-      </div>
-      
-      {/* Floating elements */}
-      {floatingElements.map((element) => (
+      {/* Floating elements - 僅客戶端渲染 */}
+      {isClient && floatingElements.map((element) => (
         <motion.div
           key={element.id}
           className={`absolute ${element.size} pointer-events-none z-10`}
@@ -469,21 +410,23 @@ export default function Hero() {
         </motion.div>
       ))}
 
-      {/* Mouse follower spotlight */}
-      <motion.div
-        className="fixed w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 70%)',
-          x: mousePosition.x * window.innerWidth - 200,
-          y: mousePosition.y * window.innerHeight - 200,
-          opacity: isHovering ? 0.8 : 0
-        }}
-        transition={{
-          type: "spring",
-          damping: 20,
-          stiffness: 300
-        }}
-      />
+      {/* Mouse follower spotlight - 僅客戶端渲染 */}
+      {isClient && (
+        <motion.div
+          className="fixed w-[400px] h-[400px] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 70%)',
+            x: mousePositionRef.current.x * (window?.innerWidth || 0) - 200,
+            y: mousePositionRef.current.y * (window?.innerHeight || 0) - 200,
+            opacity: isHovering ? 0.8 : 0
+          }}
+          transition={{
+            type: "spring",
+            damping: 20,
+            stiffness: 300
+          }}
+        />
+      )}
 
       {/* Main content */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-24 sm:px-8 lg:py-32">
@@ -579,7 +522,7 @@ export default function Hero() {
                         scale: 1.2, 
                         color: '#4f46e5',
                         textShadow: '0 0 8px rgba(79, 70, 229, 0.6)',
-                        rotate: Math.random() * 10 - 5
+                        rotate: 3
                       }}
                     >
                       {char}
@@ -588,12 +531,138 @@ export default function Hero() {
                 </motion.span>
               </h1>
             </motion.div>
-              <motion.p 
-              className="mt-10 mx-auto max-w-2xl text-xl sm:text-2xl text-gray-600 leading-relaxed"
-              variants={textVariants}
+              <motion.div 
+                className="mt-10 mx-auto max-w-2xl bg-gradient-to-r from-blue-50/80 to-indigo-50/80 backdrop-blur-lg p-6 rounded-xl border border-blue-100/80 shadow-lg relative overflow-hidden"
+                variants={textVariants}
               >
-                本會旨在推廣人工智慧技術於台灣社會的實務應用，協助全民理解並運用AI工具，以提升生活品質與職場競爭力，促進數位轉型與全民科技素養。
-              </motion.p>
+                {/* Animated background elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  {/* Gradient animation */}
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5"
+                    animate={{ 
+                      background: [
+                        'radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15), rgba(79, 70, 229, 0.05) 50%, transparent)',
+                        'radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.15), rgba(79, 70, 229, 0.05) 50%, transparent)',
+                        'radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15), rgba(79, 70, 229, 0.05) 50%, transparent)'
+                      ]
+                    }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  
+                  {/* 使用確定性位置的粒子效果，而不是隨機值 */}
+                  {isClient && [...Array(20)].map((_, i) => {
+                    // 使用基於索引的確定性值計算
+                    const leftPosition = `${(i * 5) % 100}%`;
+                    const topPosition = `${(i * 7) % 100}%`;
+                    const yOffset = ((i % 5) * 6) - 15;
+                    const xOffset = ((i % 7) * 5) - 15;
+                    const opacityValues = [0.2, 0.5, 0.2];
+                    const scaleValues = [1, 1 + (i % 5) * 0.1, 1];
+                    const duration = 3 + (i % 5);
+                    
+                    return (
+                      <motion.div
+                        key={i}
+                        className="absolute w-1 h-1 rounded-full bg-blue-400/30"
+                        style={{
+                          left: leftPosition,
+                          top: topPosition,
+                        }}
+                        animate={{
+                          y: [0, yOffset],
+                          x: [0, xOffset],
+                          opacity: opacityValues,
+                          scale: scaleValues
+                        }}
+                        transition={{
+                          duration: duration,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    );
+                  })}
+                  
+                  {/* Grid pattern */}
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#6366f112_1px,transparent_1px),linear-gradient(to_bottom,#6366f112_1px,transparent_1px)] bg-[size:20px_20px]" />
+                </div>
+                
+                {/* Mission title */}
+                <motion.h3 
+                  className="text-lg font-semibold text-indigo-800 mb-3 relative z-10"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  未來視野
+                </motion.h3>
+                
+                {/* Main mission statement */}
+                <motion.div 
+                  className="mb-4 relative z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                >
+                  <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 inline-block" style={{ backgroundSize: '300% 100%' }}>
+                    <motion.span
+                      animate={{ backgroundPosition: ['0% center', '100% center', '0% center'] }}
+                      transition={{ duration: 8, repeat: Infinity }}
+                      style={{ backgroundSize: '300% 100%' }}
+                      className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700"
+                    >
+                      AI，為你掌握每一刻
+                    </motion.span>
+                  </h2>
+                  
+                  {/* Animated underline */}
+                  <motion.div
+                    className="h-[3px] bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-full mt-1"
+                    initial={{ width: 0, x: '50%' }}
+                    animate={{ width: '100%', x: 0 }}
+                    transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+                  />
+                </motion.div>
+                
+                {/* Mission description */}
+                <motion.p
+                  className="text-gray-700 relative z-10 leading-relaxed"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1, duration: 0.5 }}
+                >
+                  智慧決策，高效生活，無限可能。
+                  讓AI成為您的專屬生活管家，為每一天創造更多價值與美好。
+                </motion.p>
+                
+                {/* Decorative elements */}
+                <motion.div 
+                  className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 blur-xl z-0"
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3]
+                  }}
+                  transition={{ 
+                    duration: 8, 
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                  }}
+                />
+                <motion.div 
+                  className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500/10 to-purple-500/10 blur-xl z-0"
+                  animate={{ 
+                    scale: [1, 1.3, 1],
+                    opacity: [0.2, 0.4, 0.2]
+                  }}
+                  transition={{ 
+                    duration: 7, 
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    delay: 2
+                  }}
+                />
+              </motion.div>
             <motion.div 
               className="mt-12 flex flex-col sm:flex-row justify-center gap-6"
               variants={containerVariants}
@@ -625,34 +694,38 @@ export default function Hero() {
                   data-cursor-text="聯絡我們"
                   data-cursor-magnetic="0.15"
                 >
-                  {/* Sparkles animation */}
-                  {[...Array(5)].map((_, i) => (
-                    <motion.span 
-                      key={i}
-                      className="absolute h-2 w-2 rounded-full bg-white/40"
-                      style={{
-                        left: `${Math.random() * 100}%`,
-                        top: `${Math.random() * 100}%`
-                      }}
-                      animate={{
-                        scale: [0, 1, 0],
-                        opacity: [0, 1, 0],
-                        left: [
-                          `${Math.random() * 100}%`,
-                          `${Math.random() * 100}%`
-                        ],
-                        top: [
-                          `${Math.random() * 100}%`,
-                          `${Math.random() * 100}%`
-                        ]
-                      }}
-                      transition={{
-                        duration: Math.random() * 2 + 1,
-                        repeat: Infinity,
-                        delay: Math.random() * 2
-                      }}
-                    />
-                  ))}
+                  {/* 使用確定性位置的閃光效果 */}
+                  {isClient && [...Array(5)].map((_, i) => {
+                    // 確定性位置和動畫時間
+                    const leftStart = `${(i * 20) % 100}%`;
+                    const leftEnd = `${((i * 20) + 10) % 100}%`;
+                    const topStart = `${(i * 18) % 100}%`;
+                    const topEnd = `${((i * 18) + 10) % 100}%`;
+                    const duration = 1 + (i % 3);
+                    const delay = i * 0.4;
+                    
+                    return (
+                      <motion.span 
+                        key={i}
+                        className="absolute h-2 w-2 rounded-full bg-white/40"
+                        style={{
+                          left: leftStart, 
+                          top: topStart
+                        }}
+                        animate={{
+                          scale: [0, 1, 0],
+                          opacity: [0, 1, 0],
+                          left: [leftStart, leftEnd],
+                          top: [topStart, topEnd]
+                        }}
+                        transition={{
+                          duration: duration,
+                          repeat: Infinity,
+                          delay: delay
+                        }}
+                      />
+                    );
+                  })}
                   
                   <motion.span 
                     className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 transform bg-white opacity-10 transition-transform duration-1000 ease-out group-hover:-translate-x-40"
@@ -772,9 +845,9 @@ export default function Hero() {
         </motion.div>
       </div>
       
-      {/* Mouse-triggered ripple effect */}
+      {/* Mouse-triggered ripple effect - 僅客戶端渲染 */}
       <AnimatePresence>
-        {isHovering && !isMobile && (
+        {isClient && isHovering && !isMobile && (
           <motion.div
             className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}

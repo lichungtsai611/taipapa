@@ -110,7 +110,7 @@ export default function FeatureSection() {
   return (
     <motion.div 
       ref={sectionRef}
-      className="relative bg-white py-28 sm:py-32 lg:py-40 overflow-hidden"
+      className="relative bg-gradient-to-b from-blue-50 via-white to-indigo-50 py-28 sm:py-32 lg:py-40 overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -143,32 +143,208 @@ export default function FeatureSection() {
             delay: 1
           }}
         ></motion.div>
+        
+        {/* Enhanced background animations */}
+        <motion.div 
+          className="absolute left-0 top-1/4 w-full h-[600px] opacity-40 -z-10"
+          style={{
+            background: "linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.08) 50%, rgba(99, 102, 241, 0.05) 100%)"
+          }}
+          animate={{
+            backgroundPosition: ['0% center', '100% center', '0% center']
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        {/* Animated geometric shapes */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Floating circle 1 */}
+          <motion.div
+            className="absolute h-32 w-32 rounded-full bg-gradient-to-r from-blue-400/10 to-indigo-400/10 backdrop-blur-3xl"
+            style={{ left: '5%', top: '10%' }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 15, 0],
+              rotate: [0, 10, 0],
+              scale: [0.9, 1.1, 0.9]
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          
+          {/* Floating rectangle 1 */}
+          <motion.div
+            className="absolute h-40 w-24 rounded-xl bg-gradient-to-t from-purple-400/10 to-transparent backdrop-blur-3xl"
+            style={{ right: '10%', top: '15%' }}
+            animate={{
+              y: [0, 40, 0],
+              x: [0, -20, 0],
+              rotate: [0, -15, 0],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2
+            }}
+          />
+          
+          {/* Floating triangle (simulated with CSS) */}
+          <motion.div
+            className="absolute w-0 h-0 border-l-[50px] border-l-transparent border-b-[80px] border-b-indigo-400/10 border-r-[50px] border-r-transparent backdrop-blur-xl"
+            style={{ left: '25%', bottom: '15%' }}
+            animate={{
+              y: [0, -25, 0],
+              x: [0, 25, 0],
+              rotate: [0, 30, 0]
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          />
+          
+          {/* Digital circuit pattern - Horizontal lines */}
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={`h-line-${i}`}
+              className="absolute h-[1px] bg-gradient-to-r from-transparent via-blue-300/20 to-transparent"
+              style={{ 
+                top: `${20 + i * 15}%`, 
+                left: '5%', 
+                right: '5%',
+              }}
+              animate={{
+                opacity: [0.1, 0.3, 0.1],
+                scaleY: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: 4 + i,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.5
+              }}
+            />
+          ))}
+          
+          {/* Digital circuit pattern - Vertical lines */}
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={`v-line-${i}`}
+              className="absolute w-[1px] bg-gradient-to-b from-transparent via-indigo-300/20 to-transparent"
+              style={{ 
+                left: `${30 + i * 20}%`, 
+                top: '15%', 
+                bottom: '15%',
+              }}
+              animate={{
+                opacity: [0.1, 0.25, 0.1],
+                scaleX: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: 6 + i,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.7
+              }}
+            />
+          ))}
+          
+          {/* Digital nodes */}
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`node-${i}`}
+              className="absolute h-2 w-2 rounded-full bg-blue-400/30"
+              style={{ 
+                left: `${15 + i * 10}%`, 
+                top: `${20 + (i % 3) * 25}%`,
+              }}
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+                boxShadow: [
+                  '0 0 0px rgba(96, 165, 250, 0)',
+                  '0 0 10px rgba(96, 165, 250, 0.3)',
+                  '0 0 0px rgba(96, 165, 250, 0)'
+                ],
+                scale: [1, 1.2, 1]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.3
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="mx-auto max-w-6xl px-6 lg:px-12">
         <motion.div 
-          className="mx-auto max-w-3xl text-center"
+          className="mx-auto max-w-3xl text-center relative p-8 rounded-2xl backdrop-blur-sm"
           variants={titleVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <motion.h2 
-            className="text-base font-semibold leading-7 text-blue-600 mb-4"
-            animate={{ 
-              scale: [1, 1.05, 1],
+          {/* Animated border effect - 確保邊框完整顯示 */}
+          <motion.div 
+            className="absolute inset-0 rounded-2xl -z-10 opacity-40"
+            style={{
+              background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #6366f1, #3b82f6)',
+              backgroundSize: '300% 300%',
+            }}
+            animate={{
+              backgroundPosition: ['0% center', '100% center', '0% center'],
             }}
             transition={{
-              duration: 2,
+              duration: 10,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+          {/* 內部背景使用相同的圓角大小 */}
+          <motion.div className="absolute inset-[1px] rounded-2xl bg-white/80 -z-10" />
+          
+          <motion.div
+            className="inline-block py-2 px-4 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 mb-4 border border-blue-200"
+            animate={{ 
+              scale: [1, 1.05, 1],
+              boxShadow: ['0 0 0 rgba(59, 130, 246, 0)', '0 0 20px rgba(59, 130, 246, 0.3)', '0 0 0 rgba(59, 130, 246, 0)']
+            }}
+            transition={{
+              duration: 3,
               repeat: Infinity,
               repeatType: "reverse"
             }}
           >
-            協會任務
-          </motion.h2>
+            <motion.h2 
+              className="text-base font-semibold leading-7 text-blue-600"
+              animate={{ 
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+            >
+              創新使命
+            </motion.h2>
+          </motion.div>
           <motion.p 
             className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl"
           >
-            全方位推動
+            讓
             <motion.span 
               className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"
               style={{ backgroundSize: "200% 200%" }}
@@ -176,15 +352,30 @@ export default function FeatureSection() {
                 backgroundPosition: ['0% center', '100% center', '0% center'] 
               }}
               transition={gradientTransition}
-            > AI普及應用</motion.span>
+            > AI成為你的生活管理者</motion.span>
           </motion.p>
           <motion.p 
-            className="mt-8 text-xl leading-8 text-gray-600"
+            className="mt-8 text-xl leading-8 text-gray-700"
             variants={titleVariants}
           >
-            台灣人工智慧實務應用推廣協會致力於協助全民理解並運用AI工具，
-            提升生活品質與職場競爭力，促進數位轉型與全民科技素養。
+            簡化決策、提升效率、釋放潛能。
+            我們致力讓AI成為你的得力助手，為生活與工作帶來前所未有的便利與價值。
           </motion.p>
+          
+          {/* Animated highlights */}
+          <motion.div
+            className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full"
+            animate={{
+              width: ['6rem', '12rem', '6rem'],
+              opacity: [0.6, 1, 0.6]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut"
+            }}
+          />
         </motion.div>
         <motion.div 
           className="mx-auto mt-20 max-w-2xl sm:mt-24 lg:mt-32 lg:max-w-5xl"

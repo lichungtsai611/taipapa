@@ -29,8 +29,8 @@ export default function RootLayout({
               type="line" 
               position="top" 
               theme="gradient" 
-              size="md" 
-              hideOnTop={true}
+              size="sm"
+              hideOnTop={false}
             />
             <Header />
             <main className="w-full overflow-x-hidden">{children}</main>

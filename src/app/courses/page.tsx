@@ -17,7 +17,8 @@ import {
   ChevronRightIcon,
   LightBulbIcon,
   StarIcon,
-  InformationCircleIcon
+  InformationCircleIcon,
+  VideoCameraIcon
 } from '@heroicons/react/24/outline';
 
 // Animation variants
@@ -86,8 +87,8 @@ const CourseNavigation = ({ courses, activeSection }: { courses: any[], activeSe
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      // Update URL without causing page jump
-      window.history.pushState(null, "", `#${id}`);
+      // 不再更新URL
+      // window.history.pushState(null, "", `#${id}`);
       
       // Smooth scroll with header offset
       const yOffset = -100;
@@ -126,6 +127,263 @@ const CourseNavigation = ({ courses, activeSection }: { courses: any[], activeSe
   );
 };
 
+// Animated course card image replacement
+const CourseImageAnimation = ({ theme, title }: { theme: string, title: string }) => {
+  const getGradient = (theme: string) => {
+    switch(theme) {
+      case 'blue':
+        return 'from-blue-400 to-indigo-600';
+      case 'purple':
+        return 'from-indigo-500 to-purple-600';
+      case 'green':
+        return 'from-emerald-400 to-cyan-500';
+      case 'orange':
+        return 'from-orange-400 to-amber-600';
+      default:
+        return 'from-blue-400 to-indigo-600';
+    }
+  };
+
+  const getSecondaryGradient = (theme: string) => {
+    switch(theme) {
+      case 'blue':
+        return 'from-cyan-300 to-blue-500';
+      case 'purple':
+        return 'from-violet-300 to-indigo-500';
+      case 'green':
+        return 'from-teal-300 to-emerald-500';
+      case 'orange':
+        return 'from-yellow-300 to-orange-500';
+      default:
+        return 'from-cyan-300 to-blue-500';
+    }
+  };
+
+  return (
+    <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Background grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+      
+      {/* Moving particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(15)].map((_, i) => (
+          <motion.div 
+            key={i}
+            className={`absolute w-1.5 h-1.5 rounded-full bg-gradient-to-r ${getGradient(theme)}`}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              opacity: 0.1 + Math.random() * 0.4,
+              scale: 0.5 + Math.random() * 1
+            }}
+            animate={{
+              x: [0, Math.random() * 50 - 25],
+              y: [0, Math.random() * 50 - 25],
+              opacity: [0.3, 0.7, 0.3]
+            }}
+            transition={{
+              duration: 3 + Math.random() * 5,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+              delay: Math.random() * 2
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Gradient main blob */}
+      <motion.div 
+        className={`absolute w-48 h-48 rounded-full bg-gradient-to-r ${getGradient(theme)} opacity-40 blur-2xl`}
+        animate={{ 
+          x: [0, 20, 0], 
+          y: [0, -15, 0],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{ 
+          duration: 8, 
+          repeat: Infinity,
+          repeatType: "mirror"
+        }}
+        style={{ left: '40%', top: '40%', transformOrigin: 'center' }}
+      />
+      
+      {/* Secondary gradient blob */}
+      <motion.div 
+        className={`absolute w-40 h-40 rounded-full bg-gradient-to-r ${getSecondaryGradient(theme)} opacity-30 blur-xl`}
+        animate={{ 
+          x: [0, -25, 0], 
+          y: [0, 20, 0],
+          scale: [1, 1.15, 1],
+        }}
+        transition={{ 
+          duration: 7, 
+          repeat: Infinity,
+          repeatType: "mirror",
+          delay: 1
+        }}
+        style={{ right: '30%', bottom: '25%', transformOrigin: 'center' }}
+      />
+
+      {/* Small floating geometric shapes */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Triangle */}
+        <motion.div
+          className="absolute"
+          style={{ 
+            left: '25%', 
+            top: '20%',
+            width: 0,
+            height: 0,
+            borderLeft: '10px solid transparent',
+            borderRight: '10px solid transparent',
+            borderBottom: `20px solid #${theme === 'blue' ? '3b82f6' : theme === 'purple' ? '8b5cf6' : theme === 'green' ? '10b981' : 'f97316'}`,
+            opacity: 0.6
+          }}
+          animate={{
+            rotate: [0, 360],
+            y: [0, 15, 0],
+            opacity: [0.6, 0.8, 0.6]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        {/* Square */}
+        <motion.div
+          className={`absolute w-5 h-5 bg-gradient-to-r ${getSecondaryGradient(theme)} rounded-sm`}
+          style={{ 
+            right: '20%', 
+            top: '30%',
+            opacity: 0.6
+          }}
+          animate={{
+            rotate: [0, 180, 360],
+            scale: [1, 1.2, 1],
+            opacity: [0.6, 0.7, 0.6]
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        {/* Circle */}
+        <motion.div
+          className={`absolute w-4 h-4 rounded-full bg-gradient-to-r ${getGradient(theme)}`}
+          style={{ 
+            left: '65%', 
+            bottom: '25%',
+            opacity: 0.7
+          }}
+          animate={{
+            scale: [1, 1.3, 1],
+            x: [0, 10, 0],
+            y: [0, -10, 0]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+
+        {/* Plus sign */}
+        <motion.div
+          className="absolute flex items-center justify-center"
+          style={{ 
+            left: '30%', 
+            bottom: '30%',
+            opacity: 0.7
+          }}
+          animate={{
+            rotate: [0, 90, 180, 270, 360],
+            y: [0, -15, 0]
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        >
+          <div className={`w-6 h-1.5 bg-gradient-to-r ${getGradient(theme)} rounded-full`}></div>
+          <div className={`w-1.5 h-6 bg-gradient-to-r ${getGradient(theme)} rounded-full absolute`}></div>
+        </motion.div>
+      </div>
+      
+      {/* Course icon and text */}
+      <motion.div 
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+      >
+        {/* Icon circle with shadow and glow effect */}
+        <motion.div 
+          className={`w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center mb-4 relative`}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+        >
+          {/* Glow effect behind icon */}
+          <div className={`absolute w-full h-full rounded-full bg-gradient-to-r ${getGradient(theme)} opacity-20 blur-md`}></div>
+          
+          {/* Center gradient circle with icon */}
+          <motion.div 
+            className={`w-14 h-14 rounded-full bg-gradient-to-r ${getGradient(theme)} flex items-center justify-center text-white shadow-md relative z-10`}
+            animate={{ 
+              scale: [1, 1.05, 1],
+              rotate: [0, 5, 0, -5, 0]
+            }}
+            transition={{ 
+              duration: 5, 
+              repeat: Infinity,
+              repeatType: "loop"
+            }}
+          >
+            {theme === 'blue' && <AcademicCapIcon className="h-7 w-7" />}
+            {theme === 'purple' && <VideoCameraIcon className="h-7 w-7" />}
+            {theme === 'green' && <WrenchScrewdriverIcon className="h-7 w-7" />}
+            {theme === 'orange' && <NewspaperIcon className="h-7 w-7" />}
+          </motion.div>
+        </motion.div>
+        
+        {/* Course title with animated gradient border */}
+        <div className="relative animate-float">
+          <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${getGradient(theme)} blur-md opacity-50 animate-pulse-custom`}></div>
+          
+          <motion.div 
+            className="relative bg-white/90 backdrop-blur-sm px-5 py-2 rounded-lg shadow-sm border border-white/50"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
+          >
+            <p className="text-sm font-medium text-gray-800 max-w-[180px] text-center">
+              {title}
+            </p>
+          </motion.div>
+        </div>
+      </motion.div>
+      
+      {/* Light ray effect */}
+      <div className="absolute inset-0 overflow-hidden opacity-30">
+        <div className={`absolute top-1/2 left-1/2 w-[200%] h-1 bg-gradient-to-r ${getGradient(theme)} opacity-40 blur-sm transform -translate-x-1/2 -translate-y-1/2 animate-rotate-slow`}></div>
+        <div className={`absolute top-1/2 left-1/2 w-1 h-[200%] bg-gradient-to-b ${getGradient(theme)} opacity-40 blur-sm transform -translate-x-1/2 -translate-y-1/2 animate-rotate-slow`}></div>
+      </div>
+      
+      {/* Subtle vignette overlay */}
+      <div 
+        className="absolute inset-0 opacity-60"
+        style={{
+          background: 'radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.2) 100%)'
+        }}
+      ></div>
+    </div>
+  );
+};
+
 const CourseCard = ({ course, index }: { course: any, index: number }) => {
   return (
               <motion.div 
@@ -146,20 +404,13 @@ const CourseCard = ({ course, index }: { course: any, index: number }) => {
     >
       <div className="relative rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-500 bg-white">
         <div className="md:flex">
-          {/* Course image with parallax effect */}
+          {/* Animated course visual instead of image */}
           <motion.div 
             className="md:w-2/5 h-64 md:h-auto relative overflow-hidden"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.4 }}
           >
-            <Image 
-              src={course.image} 
-                    alt={course.title} 
-              className="object-cover object-center w-full h-full transform group-hover:scale-105 transition-transform duration-700"
-              width={600}
-              height={400}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <CourseImageAnimation theme={course.theme} title={course.title} />
           </motion.div>
           
           {/* Course details */}
@@ -363,35 +614,9 @@ const InvitationSection = () => {
             ))}
           </div>
 
-        <motion.div 
-          className="mt-16 text-center"
-          variants={fadeIn}
-        >
-          <Link href="/#invitation">
-            <motion.div 
-              className="inline-block bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-full p-6 shadow-xl cursor-pointer"
-              whileHover={{ scale: 1.1, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <motion.div
-                animate={{ 
-                  y: [0, -10, 0],
-                  transition: { 
-                    duration: 1.5, 
-                    repeat: Infinity,
-                    repeatType: "loop" 
-                  }
-                }}
-              >
-                <ArrowDownCircleIcon className="h-10 w-10 text-white" />
-              </motion.div>
-            </motion.div>
-              </Link>
-          <p className="mt-4 text-lg font-medium text-gray-700">請聯繫我們，獲取更詳細的課程資訊</p>
-        </motion.div>
+
       </motion.div>
-    </motion.div>
+        </motion.div>
   );
 };
 
@@ -417,8 +642,8 @@ export default function CoursesPage() {
             const id = entry.target.id;
             if (id) {
               setActiveSection(id);
-              // Update URL hash without scrolling
-              window.history.replaceState(null, "", `#${id}`);
+              // 移除自動更新URL哈希的行為
+              // window.history.replaceState(null, "", `#${id}`);
             }
           }
         });
@@ -477,10 +702,11 @@ export default function CoursesPage() {
               behavior: 'smooth'
             });
             
-            // Update URL hash without causing a scroll
-            if (!window.location.hash || window.location.hash.substring(1) !== targetId) {
-              window.history.pushState(null, '', `#${targetId}`);
-            }
+            // 只有在用戶直接訪問帶有錨點的URL時才保留錨點
+            // 如果是從其他頁面導航過來的，不添加錨點到URL
+            // if (!window.location.hash || window.location.hash.substring(1) !== targetId) {
+            //   window.history.pushState(null, '', `#${targetId}`);
+            // }
             
             return true; // Successfully scrolled
           }
@@ -559,7 +785,7 @@ export default function CoursesPage() {
       id: "courses-intro",
       title: "AI 工具基礎課程",
       description: "掌握 AI 工具的基本技能，學習如何運用 AI 提升工作效率、創意思考和解決問題的能力。",
-      image: "/images/courses/ai-tools.jpg",
+      theme: "blue", // Theme for animation
       level: "入門到進階",
       duration: "8週課程",
       rating: 4.8,
@@ -574,7 +800,7 @@ export default function CoursesPage() {
       id: "courses-ai-video",
       title: "AI 影片製作",
       description: "利用 AI 技術創建專業影片，學習腳本撰寫、配音生成、剪輯與發布，運用最新的 AI 工具。",
-      image: "/images/courses/ai-video.jpg",
+      theme: "purple", // Theme for animation
       level: "進階課程",
       duration: "10週課程",
       rating: 4.9,
@@ -589,7 +815,7 @@ export default function CoursesPage() {
       id: "courses-web-design",
       title: "AI 網頁設計",
       description: "透過 AI 輔助更快設計出令人驚艷的網站，掌握 UI/UX 原則並應用 AI 工具實現設計。",
-      image: "/images/courses/web-design.jpg",
+      theme: "green", // Theme for animation
       level: "適合各級學員",
       duration: "6週課程",
       rating: 4.7,
@@ -604,7 +830,7 @@ export default function CoursesPage() {
       id: "courses-plan",
       title: "AI 數位行銷",
       description: "革新您的行銷策略，學習如何使用 AI 工具創建活動、分析數據並優化績效。",
-      image: "/images/courses/digital-marketing.jpg",
+      theme: "orange", // Theme for animation
       level: "初學者到專家",
       duration: "12週課程",
       rating: 4.6,

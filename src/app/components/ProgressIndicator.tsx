@@ -28,11 +28,11 @@ export default function ProgressIndicator({
   const { scrollYProgress } = useScroll();
   const [percentageText, setPercentageText] = useState('0%');
   
-  // Add spring physics for smooth animation
+  // Add spring physics for smooth animation with improved settings
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
+    stiffness: 120,
+    damping: 25,
+    restDelta: 0.0005
   });
 
   // Listen to scroll progress for percentage text
@@ -55,7 +55,7 @@ export default function ProgressIndicator({
       case 'dark':
         return 'bg-gray-800';
       case 'gradient':
-        return 'bg-gradient-to-r from-blue-500 to-purple-500';
+        return 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600';
       default:
         return 'bg-blue-500';
     }
@@ -65,11 +65,11 @@ export default function ProgressIndicator({
   const getSizeStyles = () => {
     switch (size) {
       case 'sm':
-        return type === 'line' ? 'h-1' : 'h-8 w-8';
+        return type === 'line' ? 'h-1.5' : 'h-8 w-8';
       case 'lg':
-        return type === 'line' ? 'h-2' : 'h-16 w-16';
+        return type === 'line' ? 'h-3' : 'h-16 w-16';
       default:
-        return type === 'line' ? 'h-1.5' : 'h-12 w-12';
+        return type === 'line' ? 'h-2' : 'h-12 w-12';
     }
   };
 
@@ -94,12 +94,13 @@ export default function ProgressIndicator({
     const isVertical = position === 'left' || position === 'right';
     return (
       <motion.div
-        className={`fixed ${getPositionStyles()} ${getSizeStyles()} z-50 origin-${isVertical ? 'top' : 'left'} ${getThemeStyles()}`}
+        className={`fixed ${getPositionStyles()} ${getSizeStyles()} z-[9999] origin-${isVertical ? 'top' : 'left'} ${getThemeStyles()} shadow-sm`}
         style={{ 
           scaleX: isVertical ? 1 : scaleX,
           scaleY: isVertical ? scaleX : 1,
           opacity: isVisible ? 1 : 0,
-          transition: 'opacity 0.3s ease' 
+          transition: 'opacity 0.3s ease',
+          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: isVisible ? 1 : 0 }}

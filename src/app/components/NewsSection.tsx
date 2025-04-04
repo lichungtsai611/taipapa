@@ -1,9 +1,15 @@
 'use client';
 
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { useRef } from 'react';
+import { 
+  CalendarIcon, 
+  MapPinIcon, 
+  UserGroupIcon,
+} from '@heroicons/react/24/outline';
 
+// 將類型定義放在本地
 type NewsCategory = '活動' | '合作' | '服務';
 
 interface NewsItem {
@@ -14,6 +20,20 @@ interface NewsItem {
   category: NewsCategory;
   imageUrl: string;
   readTime: string;
+}
+
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  location: string;
+  image: string;
+  attendees: string;
+  featured: boolean;
+  url: string;
+  status: string;
 }
 
 const news: NewsItem[] = [
@@ -59,6 +79,27 @@ const categoryGlows: Record<NewsCategory, string> = {
 };
 
 // Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } }
+};
+
+// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -96,87 +137,252 @@ const titleVariants = {
   }
 };
 
+// EventCard 組件 - 從events頁面移植過來
+const EventCard = ({ event }: { event: Event }) => {
+  const cardRef = useRef(null);
+  const isInView = useInView(cardRef, { once: true, margin: "-50px" });
+  
+  // 根據活動標題生成顏色
+  const generateGradient = (title: string) => {
+    // 基於標題的簡單哈希生成不同的漸變顏色
+    const hash = title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hue1 = hash % 360;
+    const hue2 = (hue1 + 40) % 360;
+    const hue3 = (hue2 + 40) % 360;
+    
+    return {
+      gradient: `linear-gradient(135deg, hsl(${hue1}, 80%, 65%), hsl(${hue2}, 80%, 45%))`,
+      accent: `hsl(${hue3}, 80%, 45%)`,
+      light: `hsl(${hue1}, 80%, 90%)`,
+    };
+  };
+  
+  const { gradient, accent, light } = generateGradient(event.title);
+  
+  return (
+    <motion.div
+      ref={cardRef}
+      className="col-span-1 bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
+      variants={fadeInUp}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      whileHover={{ scale: 1.02 }}
+    >
+      <div>
+        <div className="relative group h-60" style={{ backgroundColor: light }}>
+          {/* 使用動畫背景而非圖片 */}
+          <div 
+            className="absolute inset-0 opacity-90 transition-all duration-500 group-hover:opacity-100"
+            style={{ background: gradient }}
+          >
+            {/* 添加裝飾性圖形 */}
+            <motion.div 
+              className="absolute top-5 left-5 w-12 h-12 rounded-full opacity-30 bg-white"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+            />
+            <motion.div 
+              className="absolute bottom-8 right-8 w-20 h-20 rounded-full opacity-20 bg-white"
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.2, 0.3, 0.2]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatType: "reverse",
+                delay: 1
+              }}
+            />
+            
+            {/* 動畫網格背景 */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+            
+            {/* 波浪動畫 */}
+            <motion.div
+              className="absolute left-0 right-0 bottom-0 h-16 opacity-30"
+              style={{
+                background: "linear-gradient(0deg, rgba(255,255,255,0.4) 0%, transparent 100%)"
+              }}
+              animate={{
+                y: [0, -10, 0]
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+            />
+            
+            {/* 浮動技術標籤 */}
+            <motion.div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-5xl font-bold opacity-10"
+              animate={{
+                opacity: [0.05, 0.1, 0.05],
+                scale: [0.9, 1, 0.9]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+            >
+              AI
+            </motion.div>
+          </div>
+          
+          {/* 活動狀態標籤 */}
+          <div className="absolute top-4 left-4 bg-white text-gray-800 px-4 py-1.5 rounded-full text-xs font-semibold uppercase shadow-lg z-10 flex items-center space-x-2">
+            {event.status === 'upcoming' ? (
+              <>
+                <motion.div 
+                  className="w-2 h-2 rounded-full bg-green-500"
+                  animate={{ scale: [1, 1.3, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                <span>即將舉行</span>
+              </>
+            ) : (
+              <>
+                <div className="w-2 h-2 rounded-full bg-gray-500" />
+                <span>已結束</span>
+              </>
+            )}
+          </div>
+          
+          {/* 活動標題以白色顯示在背景上 */}
+          <div className="absolute bottom-4 left-4 right-4 z-10">
+            <motion.h3 
+              className="text-2xl font-bold text-white drop-shadow-md"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              {event.title}
+            </motion.h3>
+          </div>
+        </div>
+        
+        <div className="p-6 relative">
+          <p className="text-gray-600 mb-5 line-clamp-3 leading-relaxed">
+            {event.description}
+          </p>
+          <div className="space-y-3 mb-4">
+            <motion.div 
+              className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-300"
+              whileHover={{ x: 5 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <CalendarIcon className="h-5 w-5 mr-3 text-indigo-500" />
+              <span className="font-medium">{event.date}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-300"
+              whileHover={{ x: 5 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <MapPinIcon className="h-5 w-5 mr-3 text-indigo-500" />
+              <span className="font-medium">{event.location}</span>
+            </motion.div>
+            <motion.div 
+              className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-300"
+              whileHover={{ x: 5 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <UserGroupIcon className="h-5 w-5 mr-3 text-indigo-500" />
+              <span className="font-medium">{event.attendees}</span>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function NewsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
   
-  // Futuristic tech decoration lines
-  const decorationLines = Array.from({ length: 4 }, (_, i) => ({
-    width: Math.floor(Math.random() * 60) + 40,
-    top: `${Math.floor(Math.random() * 80) + 10}%`,
-    left: i % 2 === 0 ? "-10px" : undefined,
-    right: i % 2 === 0 ? undefined : "-10px",
-    delay: i * 0.5,
-    duration: Math.floor(Math.random() * 2) + 3,
-    from: i % 2 === 0 ? "purple-500" : "blue-500",
-    to: i % 2 === 0 ? "transparent" : "transparent",
-  }));
+  // 獲取最新活動數據
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        // 在實際應用中，這裡會是一個API調用
+        // 由於我們無法直接訪問服務器文件，模擬從/news/events/獲取數據
+        // 這裡使用硬編碼的數據，這些數據是從/news/events/page.tsx中複製的
+        const associationEvents = [
+          {
+            id: 11,
+            title: "解鎖職場探險指南-AI時代求職生存指南",
+            description: "提供AI時代職場生存策略與求職技巧，幫助參與者了解如何在AI驅動的就業市場中脫穎而出，掌握未來職場核心競爭力。",
+            date: "2025-05-16",
+            time: "14:00 - 17:00",
+            location: "健行科技大學",
+            image: "https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80",
+            attendees: "學生、應屆畢業生、求職者",
+            featured: false,
+            url: "/events/ai-career-guide",
+            status: "upcoming"
+          },
+          {
+            id: 10,
+            title: "AI 時代來臨～從跨域尋找新思維",
+            description: "探索AI跨領域融合的創新思維與應用模式，激發參與者跳脫傳統框架，發掘AI與各行業結合的無限可能。",
+            date: "2025-10-14",
+            time: "09:30 - 16:30",
+            location: "宜蘭縣政府",
+            image: "https://images.unsplash.com/photo-1673469747764-3968710de205?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+            attendees: "公務人員、教育工作者、創新創業者",
+            featured: false,
+            url: "/events/ai-cross-domain-thinking",
+            status: "upcoming"
+          },
+          {
+            id: 9,
+            title: "AI 人工智慧的發展趨勢及產業運用",
+            description: "深入探討AI發展的最新趨勢及其在各行業的創新應用，幫助求職者與企業了解AI時代的職場需求與機會。",
+            date: "2025-09-05",
+            time: "13:30 - 17:00",
+            location: "新北市政府就業服務處",
+            image: "https://images.unsplash.com/photo-1591453089816-0fbb971b454c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+            attendees: "求職者、職涯轉換者、企業HR",
+            featured: true,
+            url: "/events/ai-industry-applications",
+            status: "upcoming"
+          }
+        ];
+        
+        // 獲取最新的三個活動（已經按日期排序）
+        setEvents(associationEvents);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch events:", error);
+        setLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, []);
 
   return (
-    <motion.div 
-      ref={sectionRef}
-      className="relative bg-gray-50 py-28 sm:py-32 lg:py-40 overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        <motion.div 
-          className="absolute left-1/2 bottom-0 -z-10 h-[300px] w-[300px] rounded-full bg-blue-100 opacity-20 blur-[100px]"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.2, 0.3, 0.2],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-        />
-        <motion.div 
-          className="absolute right-1/2 top-0 -z-10 h-[300px] w-[300px] rounded-full bg-purple-100 opacity-20 blur-[100px]"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.25, 0.2],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            repeatType: "reverse",
-            delay: 1
-          }}
-        />
-      </div>
+    <div className="py-24 sm:py-32 bg-gradient-to-tr from-purple-50 via-white to-blue-50 relative" ref={sectionRef}>
+      {/* 網格裝飾背景 */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#6366f108_1px,transparent_1px),linear-gradient(to_bottom,#6366f108_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none"></div>
+      
+      {/* 藍色光球裝飾 */}
+      <div className="absolute -left-20 top-20 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 pointer-events-none"></div>
+      <div className="absolute right-0 bottom-40 w-80 h-80 bg-indigo-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-15 pointer-events-none"></div>
 
-      {/* Futuristic tech decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {decorationLines.map((line, index) => (
-          <motion.div 
-            key={index}
-            className={`absolute h-[1px] bg-gradient-to-r from-${line.from}/30 to-${line.to}`}
-            style={{
-              width: line.width,
-              top: line.top,
-              left: line.left,
-              right: line.right,
-            }}
-            animate={{
-              width: [line.width, line.width * 4, line.width],
-              opacity: [0, 0.5, 0],
-            }}
-            transition={{
-              duration: line.duration,
-              repeat: Infinity,
-              repeatType: "reverse",
-              delay: line.delay
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="mx-auto max-w-6xl px-6 lg:px-12">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div 
           className="mx-auto max-w-3xl text-center"
           variants={titleVariants}
@@ -210,142 +416,45 @@ export default function NewsSection() {
             了解協會最新動態、活動資訊與AI發展趨勢
           </motion.p>
         </motion.div>
+        
         <motion.div 
-          className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-20 grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3"
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          {news.map((item, index) => (
-            <motion.article 
-              key={item.id} 
-              className="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80 group"
-              variants={itemVariants}
-              whileHover={{ y: -10, transition: { duration: 0.3 } }}
-            >
-              <motion.div
-                className="absolute inset-0 -z-10 overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.5 }}
-              >
-                <motion.img
-                  src={item.imageUrl}
-                  alt={item.title}
-                  className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                />
-              </motion.div>
-              
+          {loading ? (
+            // 載入中狀態顯示
+            Array(3).fill(0).map((_, index) => (
               <motion.div 
-                className="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"
-                animate={{
-                  background: ["linear-gradient(to top, rgba(17, 24, 39, 1), rgba(17, 24, 39, 0.4) 60%, rgba(17, 24, 39, 0))", 
-                              "linear-gradient(to top, rgba(17, 24, 39, 1), rgba(17, 24, 39, 0.5) 65%, rgba(17, 24, 39, 0.1))"]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: "reverse"
-                }}
-              />
-              
-              <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
-
-              <div className="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-gray-300">
-                <motion.span 
-                  className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${categoryColors[item.category]} text-white mr-2 shadow-lg`}
-                  whileHover={{ 
-                    scale: 1.05, 
-                    boxShadow: `0 0 12px 0 ${categoryColors[item.category]}` 
-                  }}
-                  layout
-                >
-                  {item.category}
-                </motion.span>
-                <time dateTime={item.date} className="mr-8">{item.date}</time>
-                <div className="-ml-4 flex items-center gap-x-4">
-                  <svg viewBox="0 0 2 2" className="-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50">
-                    <circle cx="1" cy="1" r="1" />
-                  </svg>
-                  <div className="flex gap-x-2.5">
-                    <span>{item.readTime}</span>
-                  </div>
+                key={index} 
+                className="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-200 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80"
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="animate-pulse flex flex-col space-y-4">
+                  <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-full"></div>
+                  <div className="h-4 bg-gray-300 rounded w-5/6"></div>
                 </div>
-              </div>
-              <motion.h3 
-                className="mt-3 text-lg font-semibold leading-6 text-white group-hover:text-blue-200 transition-colors duration-300"
-                whileHover={{ x: 3 }}
-                transition={{ type: "spring", stiffness: 300, damping: 10 }}
-              >
-                <Link href={`/news/${item.id}`}>
-                  <span className="absolute inset-0" />
-                  {item.title}
-                </Link>
-              </motion.h3>
-              <motion.p 
-                className="mt-3 text-sm leading-6 text-gray-300 line-clamp-3"
-                variants={titleVariants}
-              >
-                {item.description}
-              </motion.p>
-              
-              {/* Futuristic hover effects */}
-              <motion.div 
-                className="absolute inset-0 rounded-2xl border border-transparent pointer-events-none"
-                initial={{ opacity: 0 }}
-                whileHover={{ 
-                  opacity: 1, 
-                  border: `1px solid ${categoryColors[item.category]}30`,
-                  boxShadow: `0 0 20px 0 ${categoryColors[item.category]}20 inset, 0 0 10px 0 ${categoryColors[item.category]}15`
-                }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.article>
-          ))}
+              </motion.div>
+            ))
+          ) : (
+            // 顯示活動卡片
+            events.map(event => (
+              <EventCard key={event.id} event={event} />
+            ))
+          )}
         </motion.div>
-        <motion.div 
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-        >
-          <Link
-            href="/news"
-            className="group relative inline-flex items-center gap-x-2 rounded-full bg-white px-8 py-4 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-900/10 transition-all duration-300 hover:ring-gray-900/20 hover:shadow-md overflow-hidden"
-          >
-            <motion.span 
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0"
-              whileHover={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            />
-            查看更多新聞
-            <motion.svg
-              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-              animate={{ x: [0, 5, 0] }}
-              transition={{ 
-                duration: 2, 
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut"
-              }}
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                clipRule="evenodd"
-              />
-            </motion.svg>
+
+        <div className="mt-16 text-center">
+          <Link href="/news/events" className="inline-flex items-center rounded-md bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all duration-300 transform hover:-translate-y-1">
+            查看更多活動
           </Link>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 } 

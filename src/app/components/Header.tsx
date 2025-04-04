@@ -169,25 +169,25 @@ const NavItem = ({ item, index }: { item: NavItemType, index: number }) => {
       <AnimatePresence>
         {isOpen && item.submenu && (
           <motion.div
-            className="absolute z-10 mt-3 w-screen max-w-[220px] rounded-xl bg-white shadow-lg ring-1 ring-gray-900/5 overflow-hidden"
+            className="absolute z-10 mt-3 w-screen max-w-[220px] rounded-xl bg-white/70 backdrop-blur-xl shadow-lg ring-1 ring-gray-900/10 overflow-hidden border border-gray-100/80"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="p-2">
+            <div className="p-3">
               {item.submenu.map((subItem, subIndex) => (
                 <motion.div
                   key={subItem.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 * subIndex }}
                   whileHover={{ x: 5 }}
                 >
                   <Link
                     href={subItem.href.includes('#') && !window.location.pathname.includes('/courses') ? 
                       subItem.href.split('#')[0] : subItem.href}
-                    className="block py-2 text-base leading-7 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                    className="block px-3 py-2.5 rounded-lg text-base leading-7 text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 transition-all duration-300"
                     onClick={(e) => {
                       // Only for course links with hash when not already on courses page
                       if (subItem.href.includes('/courses#') && !window.location.pathname.includes('/courses')) {
@@ -203,8 +203,8 @@ const NavItem = ({ item, index }: { item: NavItemType, index: number }) => {
                     }}
                   >
                     <div className="flex items-center">
-                      {subItem.icon}
-                      {subItem.name}
+                      <span className="mr-2 flex items-center justify-center text-blue-600">{subItem.icon}</span>
+                      <span>{subItem.name}</span>
                     </div>
                   </Link>
                 </motion.div>
@@ -233,7 +233,7 @@ export default function Header() {
 
   return (
     <header 
-      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-40 backdrop-blur-md transition-all duration-300 ${
         scrolled ? 'bg-white/90 shadow-sm' : 'bg-transparent'
       }`}
     >
@@ -315,7 +315,7 @@ export default function Header() {
               }}
             />
             <Link 
-              href="/#invitation" 
+              href="#invitation" 
               className="relative inline-flex items-center justify-center rounded-md bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-2.5 text-base font-bold text-white shadow-md hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
               data-cursor-hover
               data-cursor-text="課程方案"
@@ -473,9 +473,9 @@ export default function Header() {
                                         <Link
                                           href={subItem.href.includes('#') && !window.location.pathname.includes('/courses') ? 
                                             subItem.href.split('#')[0] : subItem.href}
-                                          className="block py-2 text-base leading-7 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                                          className="block px-3 py-2.5 rounded-lg text-base leading-7 text-gray-700 hover:text-blue-600 hover:bg-blue-50/50 transition-all duration-300"
                                           onClick={(e) => {
-                                            // Close mobile menu when clicking any link
+                                            // Close mobile menu when a link is clicked
                                             setMobileMenuOpen(false);
                                             
                                             // Only for course links with hash when not already on courses page
@@ -492,8 +492,8 @@ export default function Header() {
                                           }}
                                         >
                                           <div className="flex items-center">
-                                            {subItem.icon}
-                                            {subItem.name}
+                                            <span className="mr-2 flex items-center justify-center text-blue-600">{subItem.icon}</span>
+                                            <span>{subItem.name}</span>
                                           </div>
                                         </Link>
                                       </motion.div>
@@ -526,7 +526,7 @@ export default function Header() {
                           }}
                         />
                         <Link
-                          href="/#invitation"
+                          href="#invitation"
                           className="relative mt-4 -mx-3 block rounded-md bg-gradient-to-r from-blue-600 to-blue-700 px-3 py-2.5 text-base font-bold text-white shadow-sm hover:from-blue-700 hover:to-blue-800 focus:outline-none transition-all duration-300"
                           onClick={() => setMobileMenuOpen(false)}
                           data-cursor-text="課程方案"
