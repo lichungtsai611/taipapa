@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import CustomCursor from "./components/CustomCursor";
 import ProgressIndicator from "./components/ProgressIndicator";
 import PageProgressProvider from "./components/PageProgressProvider";
+import PageProgressDots from "./components/PageProgressDots";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
               size="sm"
               hideOnTop={false}
             />
+            <PageProgressDots />
             <Header />
             <main className="w-full overflow-x-hidden">{children}</main>
             <Footer />

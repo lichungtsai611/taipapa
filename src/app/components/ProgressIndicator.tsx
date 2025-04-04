@@ -65,11 +65,11 @@ export default function ProgressIndicator({
   const getSizeStyles = () => {
     switch (size) {
       case 'sm':
-        return type === 'line' ? 'h-1.5' : 'h-8 w-8';
+        return type === 'line' ? 'h-0.5' : 'h-8 w-8';
       case 'lg':
-        return type === 'line' ? 'h-3' : 'h-16 w-16';
+        return type === 'line' ? 'h-1.5' : 'h-16 w-16';
       default:
-        return type === 'line' ? 'h-2' : 'h-12 w-12';
+        return type === 'line' ? 'h-1' : 'h-12 w-12';
     }
   };
 

@@ -12,7 +12,7 @@ interface SectionProgressBarProps {
 
 export default function SectionProgressBar({
   sections = [],
-  height = '8px',
+  height = '4px',
   position = 'top',
   showLabels = false
 }: SectionProgressBarProps) {
@@ -87,7 +87,7 @@ export default function SectionProgressBar({
   return (
     <div className={`fixed ${getPositionStyle()} z-50`}>
       <div 
-        className={`relative ${isVertical ? 'h-full w-2' : `w-full h-[${height}]`} bg-gray-200 bg-opacity-30`}
+        className={`relative ${isVertical ? 'h-full w-1' : `w-full h-[${height}]`} bg-gray-200 bg-opacity-30`}
       >
         <motion.div
           className="absolute bg-gradient-to-r from-blue-500 to-purple-500"
